@@ -1,4 +1,4 @@
-# fuzz_for_eos
+# fuzz2wasm
 
 ---
 
