@@ -9,7 +9,7 @@
 
 2. Change the location of files
   - /usr/local/usr/share/eosio/contractsdk/lib/* -> /usr/local/eos/usr/share/eosio/contractsdk/lib/*
-  - or edit cmake_install.cmake file
+  - or edit cmake_install.cmake file  
     [!] eos/build/contract/libc++  
     [!] eos/build/contract/eosiolib  
     [!] eos/build/contract/identity  
