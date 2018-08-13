@@ -1,11 +1,8 @@
 ## eos patch guide for latest release
 
 ### 1. Replace 1.1.x CMakeLists.txt to 1.0.x CMakeLists.txt
-- eos/build/unittests/CMakeLists.txt
 - eos/build/externals/CMakeLists.txt
-- eos/build/plugins/CMakeLists.txt
 - eos/build/contracts/CMakeLists.txt
-- eos/build/programs/CMakeLists.txt
 - eos/build/tools/CMakeLists.txt
 - eos/build/libraries/CMakeLists.txt
 
