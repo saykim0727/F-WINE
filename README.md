@@ -13,8 +13,8 @@ To build & install the eos, run "build_eos.sh" script.
 
 ## EoS Conmand line for Smart contract build 
 ```
-$eosiocpp -n test  						# Make skeleton code
-$eosiocpp -o test.cpp 					# OUTPUT : **.wasm, **wast 
+$eosiocpp -n test  				# Make skeleton code
+$eosiocpp -o test.cpp 				# OUTPUT : **.wasm, **wast 
 $eosiocpp -g test.abi test.cpp  		# Make abi json list
 
 ```
@@ -22,7 +22,7 @@ $eosiocpp -g test.abi test.cpp  		# Make abi json list
 
 ## EoS Command line for NODE
 ```
-$cleos create key  									#Generate pub key, priv key
+$cleos create key  					#Generate pub key, priv key
 $cleos wallet import -name [UserName]
 $cleos wallet unlock -n [walletName] 
 $cleos set contract [ContractName] [MethodName] 	#Load contract in NODE 
