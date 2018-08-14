@@ -8,7 +8,7 @@
 ## EoS Conmand line for Smart contract build 
 ```
 $eosiocpp -n test  				# Make skeleton code
-$eosiocpp -o test.cpp 				# OUTPUT : **.wasm, **wast 
+$eosiocpp -o test.wast test.cpp 				# OUTPUT : **.wasm, **wast 
 $eosiocpp -g test.abi test.cpp  		# Make abi json list
 
 ```
