@@ -12,7 +12,7 @@
 --- 
 ## Directory
 
-* seed : test case that cause crash in eos web assembly engine.
+* seed : test case that cause crash in web assembly engine.
 
 
 
