@@ -43,7 +43,7 @@ $cleos create account eosio [New Account] [Imported pub key]
 
 ```
 
-
+```
 $cleos wallet unlock -n [WalletName]                                                     	  # if the wallet is locked, tpye this command 
 $cleos create account [authorizing_account] [AccountName] [Own_pubkey] [Active_pubkey]   	  # authorizing_account=eosio
 $cleos set contract [AccountName] [Contract_dir] 	                                          #Set contract in NODE 
