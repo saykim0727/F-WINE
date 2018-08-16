@@ -18,7 +18,7 @@ $eosiocpp -g test.abi test.cpp  		# Make abi json list
 
 ### Run node
 ```
-$nodeos -e -p eosio --plugin eosio::chain_api_plugin --plugin eosio::history_api_plugin --contracts-console --delete-all-blocks
+$nodeos -e -p eosio --plugin eosio::chain_api_plugin --plugin eosio::history_api_plugin --contracts-console (--delete-all-blocks, --hard-replay-blockchain)
 ```
 
 ### Create wallet
