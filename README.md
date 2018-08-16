@@ -24,6 +24,7 @@ $nodeos -e -p eosio --plugin eosio::chain_api_plugin --plugin eosio::history_api
 ### Set contract
 ```
 $cleos wallet create -n [WalletName]  		# Make wallet
+$cleos wallet create --name "[Walletname]" -f passwd
 ```
 You have to remember the password of [WalletName]  
   
