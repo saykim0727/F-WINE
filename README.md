@@ -24,21 +24,21 @@ $nodeos -e -p eosio --plugin eosio::chain_api_plugin --plugin eosio::history_api
 ### Set contract
 ```
 $cleos wallet create -n [WalletName]  		# Make wallet
+or
 $cleos wallet create --name "[Walletname]" -f passwd
 ```
 You have to remember the password of [WalletName]  
-  
-```
-$cleos create key  					# Generate pub key, priv key
-$cleos wallet import --name [WalletName]  		# type the priv key
-```
-your wallet should have 2 pair key(one is owner_key, the other is active_key), but you can use both sides with 1 pair key.
-* owner_key : is related owner permission
-* active_key : is related 
+
 
 ### Import eosio [default auth account]  (NOT SURE)
 ```
-$cleos wallet import -n [WalletName] --private-key 5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3		# Import eosio keys
+$cleos create key  					# Generate pub key, priv key  
+
+$cleos wallet import --name [WalletName] [priv_key]
+or
+$cleos wallet import -n [WalletName] --private-key [priv_key]
+
+$cleos wallete import 5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3   #Import eosio priv key
 $cleos create account eosio [New Account] [Imported pub key]
 
 ```
