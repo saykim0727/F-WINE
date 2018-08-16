@@ -30,7 +30,8 @@ You have to remember the password of [WalletName]
   
 ```
 $cleos create key  					# Generate pub key, priv key
-$cleos wallet import -name [WalletName]  		# type the priv key
+$cleos wallet import --name [WalletName]  		# type the priv key
+$cleos wallet import --name "k1rh4" --private-key passwd  ## with passwd
 ```
 your wallet should have 2 pair key(one is owner_key, the other is active_key), but you can use both sides with 1 pair key.
 * owner_key : is related owner permission
