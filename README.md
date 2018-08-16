@@ -21,7 +21,7 @@ $eosiocpp -g test.abi test.cpp  		# Make abi json list
 $nodeos -e -p eosio --plugin eosio::chain_api_plugin --plugin eosio::history_api_plugin --contracts-console --delete-all-blocks
 ```
 
-### Set contract
+### Create wallet
 ```
 $cleos wallet create -n [WalletName]  		# Make wallet
 or
@@ -41,11 +41,12 @@ $cleos wallet import -n [WalletName] --private-key [priv_key]
 $cleos wallete import 5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3   #Import eosio priv key
 $cleos create account eosio [New Account] [Imported pub key]
 
+if the wallet is locked, tpye this command 
+$cleos wallet unlock -n [WalletName]                                                     	 
 ```
 
+### Set smart contract
 ```
-$cleos wallet unlock -n [WalletName]                                                     	  # if the wallet is locked, tpye this command 
-$cleos create account [authorizing_account] [AccountName] [Own_pubkey] [Active_pubkey]   	  # authorizing_account=eosio
 $cleos set contract [AccountName] [Contract_dir] 	                                          #Set contract in NODE 
 $cleos push action [AccountName] [MethodName] '["Argument"]' -p [Action_username]  		  # Action_username(could be AccountName or other users)
 
