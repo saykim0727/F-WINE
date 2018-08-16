@@ -36,7 +36,6 @@ your wallet should have 2 pair key(one is owner_key, the other is active_key), b
 * owner_key : is related owner permission
 * active_key : is related 
 
-```
 ### Import eosio [default auth account]  (NOT SURE)
 ```
 $cleos wallet import -n [WalletName] --private-key 5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3		# Import eosio keys
