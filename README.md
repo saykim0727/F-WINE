@@ -30,7 +30,7 @@ $cleos wallet create --name "[Walletname]" -f passwd
 You have to remember the password of [WalletName]  
 
 
-### Import eosio [default auth account]  (NOT SURE)
+### Create account(import eosio [default auth account])
 ```
 $cleos create key  					# Generate pub key, priv key  
 
