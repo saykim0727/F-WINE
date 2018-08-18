@@ -22,6 +22,7 @@ Remove /usr/local/eosio/share/eosio/skeleton/skeleton  <--- link
 #### /Users/k1rh4/GIT/EOS/EoS-project/eos/build/share/eosio 
 
 =======
+
 ## EoS 1.2.x branch eos_build.sh need LLVM version 4.0
 #### Modify Cmakefile from LLVM 4.0 to LLVM 6.0 
 >>>>>>> 88ce68457fb2965d558be44fbfa9de6cf7763dfe
