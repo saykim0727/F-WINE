@@ -38,7 +38,10 @@ $cleos wallet import --name [WalletName] [priv_key]
 or
 $cleos wallet import -n [WalletName] --private-key [priv_key]
 
-$cleos wallete import 5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3   #Import eosio priv key
+$cleos wallet import -n [WalletName] 5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3   #Import eosio priv key
+or 
+$cleos wallet import -n [WalletName] --private-key 5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3   #Import eosio priv key
+
 $cleos create account eosio [New Account] [Imported pub key]
 
 if the wallet is locked, tpye this command 
