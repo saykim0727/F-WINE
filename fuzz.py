@@ -6,15 +6,14 @@ CLEOS       = BUILD_DIR + "/programs/cleos/cleos"
 
 import subprocess
 import psutil
-# -e -p eosio --plugin eosio::chain_api_plugin --plugin eosio::history_api_plugin --contracts-console --delete-all-blocks
 
-###########################
-#node run
-
-proc = subprocess.Popen([NODES , "-e", "-p" , "eosio","--plugin" ,"eosio::chain_api_plugin" , "--plugin" ,"eosio::history_api_plugin" ,"--contracts-console","--delete-all-blocks","--hard-replay-blockchain" ], shell=True)
-print pid_ = proc.pid
+#run_node() Start
+proc = subprocess.Popen([NODEOS , "-e", "-p" , "eosio","--plugin" ,"eosio::chain_api_plugin" , "--plugin" ,"eosio::history_api_plugin" ,"--contracts-console","--delete-all-blocks","--hard-replay-blockchain" ], shell=True)
+pid_ = proc.pid
+print pid_
 
 current_process = psutil.Process(pid_)
+children = current_process.children(recursive=True)
 child_pid = 0
 for child in children :
 	try:
@@ -24,34 +23,45 @@ for child in children :
 		child_pid = pid_
 
 print (child_pid)
+#return child_pid
+#run_node() End
 
-##########################
-# contract upload, push
 
 
+#push_testcase() Start
 account_name = "test"
-fuzzing_contract = "/contracts/hello"
-push_process = subprocess.Popen([CLEOS,"set","contract",account_name,BUILD_DIR + fuzz_contract)
+contract_dir = "/contracts/hello"
+set_process = subprocess.Popen([CLEOS,"set","contract",account_name,BUILD_DIR + contract_dir],shell=True)
 
 method = "hi"
-push_process = subprocess.Popen([CLEOS,"push","action",account_name,method,argument,"-p",account_name)
+argument = "'[\"test\"]'"
+push_process = subprocess.Popen([CLEOS,"push","action",account_name,method,argument,"-p",account_name],shell=True)
+#return 
+#push_testcase() End
 
 
-#################
-#
+#core_setup() Start
 import os
-os.mkdir("/tmp/core")
+
+#global data
 core_dir = "/tmp/core"
-os.mkdir("/tmp/crash")
 crash_dir = "/tmp/crash"
 
-os.system("ulimit -c unlimited")
-os.system('echo "%s/core.%e.%p.%t" > /proc/sys/kernel/core_pattern' % core_dir)
+if os.path.isdir(core_dir) != True:
+	os.mkdir(core_dir)
 
-####################
-# check child_pid
+if os.path.isdir(crash_dir) != True:
+	os.mkdir("/tmp/crash")
+
+os.system("ulimit -c unlimited")
+os.system('sudo echo "%s/core.%%e.%%p.%%t" > /proc/sys/kernel/core_pattern' % (core_dir))
+#return 
+#core_setup() End
+
+
+#crash_check(child_pid,BUILD_DIR,contract) Start
 from shutil import move
-from time
+import time
 
 if psutil.pid_exists(child_pid) == False:
 	for filename in  os.listdir(core_dir): 
@@ -59,6 +69,9 @@ if psutil.pid_exists(child_pid) == False:
 			timer = time.time()
 			os.mkdir("%s/%s" % (crash_dir, timer))
 			move("%s/%s" % (core_dir,filename), "%s/%s" % (crash_dir, timer))
-			move("%s/%s" % (BUILD_DIR,fuzzing_contract),"%s/%s" % (crash_dir,timer))
+			move("%s/%s" % (BUILD_DIR,contract),"%s/%s" % (crash_dir,timer))
+#return 
+#crash_check() End
 
-		
+import signal
+os.killpg(os.getpgid(proc.pid),signal.SIGTERM)
