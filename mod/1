@@ -1,0 +1,33 @@
+import subprocess
+import psutil
+import time 
+
+class Nodeos :	
+	NODEOS = ""
+	def __init__ (self, NODEOS_PATH = "/home/kim/eos/build/programs/nodeos/nodeos" ):
+		this.NODEOS = NODEOS_PATH
+		print this.NODEOS
+
+	def runNodeos():
+		proc = subprocess.Popen([this.NODEOS , "-e", "-p" , "eosio","--plugin" ,"eosio::chain_api_plugin" , "--plugin" ,"eosio::history_api_plugin" ,"--contracts-console","--delete-all-blocks","--hard-replay-blockchain" ],stderr=subprocess.PIPE) #need stdout, stderr redirection
+		pid = proc.pid
+		time.sleep(3)
+		#print "%s\n%s[!] RUN NODEOS %s" % (DIVISION,C_YELLOW, C_END)
+		print "[!] RUN NODEOS"
+		return pid 
+
+	def getChildPid(pid):
+		current_process 	=  psutil.Process(pid)
+		children 					= current_process.children(recursive=True)
+		child_pid 				= 0
+		print('%s[*] Nodeos pid is {}'.format(pid))
+		for child in children :
+			try:
+				child_pid = child.pid
+			except:
+				child_pid = pid
+		print('%s[*] Child pid is {}'.format(child_pid)
+		return child_pid
+
+#return child_pid
+#run_node() Endrint lock_check
