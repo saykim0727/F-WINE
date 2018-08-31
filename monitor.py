@@ -1,11 +1,9 @@
 import os
 
 class Monitor:
-	_core_dir 	= ""
-	_crash_dir 	= ""
 	def __init__(self, core_dir = "/tmp/core" , crash_dir = "/tmp/crash" ):
-		_core_dir 	= core_dir
-		_crash_dir 	= crash_dir 
+		self._core_dir   = core_dir
+		self._crash_dir = crash_dir 
 
 		if os.path.isdir(core_dir) != True:
 			os.mkdir(core_dir)
@@ -18,11 +16,12 @@ class Monitor:
 		print "[!] COLLECT CORE_PATTERN"
 
 	#crash_check(child_pid,BUILD_DIR,contract) Start
-        def crashMonitor(pid,contract):
+        def crashMonitor(self, pid,contract):
 		from shutil import move
+                import psutil
 		import time
 		if psutil.pid_exists(pid) == False:
-			for filename in  os.listdir(this._core_dir):
+			for filename in  os.listdir(self._core_dir):
 				if filename.find("core") >= 0 :
 					timer = time.time()
 					os.mkdir("%s/%s" % (this._crash_dir, timer))

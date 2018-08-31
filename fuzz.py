@@ -26,12 +26,7 @@ classCleos.pushTransaction(account, "hi","[\"Test\"]")
 classMonitor = Monitor()
 classMonitor.crashMonitor(pid,"/contracts/hello")
 
-
-#crash_check(child_pid,BUILD_DIR,contract) Start
-#return 
-#crash_check() End
-
-import signal
-os.killpg(os.getpgid(proc.pid),signal.SIGTERM)
+#import signal
+#os.killpg(os.getpgid(proc.pid),signal.SIGTERM)
 
 

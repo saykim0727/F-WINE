@@ -2,7 +2,7 @@ import subprocess
 import psutil
 import time 
 
-BUILD_DIR = "/home/kim/eos/build/"
+BUILD_DIR = "/home/k1rh4/GIT/eos/build/"
 
 class Nodeos :	
 	def __init__ (self, nodeos_path = BUILD_DIR + "programs/nodeos/nodeos" ):
@@ -30,22 +30,20 @@ class Nodeos :
 		return child_pid
 
 class Cleos():
-	_cleos				=""
-	_walletName 	=""
 
 	def __init__(self, wallet_name ="test1234", cleos_path = BUILD_DIR+"/programs/cleos/cleos" ):
-		_cleos			= cleos_path 
-		_walletName = wallet_name
-		print _cleos, _walletName 
+		self._cleos = cleos_path 
+		self._walletName = wallet_name
+		print self._cleos, self._walletName 
 
 	def createWallet(self):
-		wallet_process 	= subprocess.Popen([self._cleos,"wallet","create","-n",_walletName],stdout=subprocess.PIPE)
+		wallet_process 	= subprocess.Popen([self._cleos,"wallet","create","-n",self._walletName],stdout=subprocess.PIPE)
 		for i in range(0,4):
 			stdout 	= wallet_process.stdout.readline()
 
 		wallet_pw 		= (str(stdout[1:-2]))
 		wallet_process.wait()
-		print "%s\n%s[!] CREATE WALLET %s" % (DIVISION,C_YELLOW, C_END)
+		print "[!] CREATE WALLET"
 #create_wallet() End
 #import_wallet_key() Start
 		eosio_key 		=	 "5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"
@@ -54,13 +52,13 @@ class Cleos():
 		pub_key 			= str(key_process.stdout.readline()[12:-1])
 		key_process.wait()
 		print "[!] CREATE KEY"
-		import_process = subprocess.Popen([self._cleos,"wallet","import","-n",wallet_name,"--private-key",priv_key])
+		import_process = subprocess.Popen([self._cleos,"wallet","import","-n",self._walletName,"--private-key",priv_key])
 		import_process.wait()
 		print "[!] IMPORT KEY"
 		return pub_key
 
-	def createAccount(self, ub_key):
-		account_name = walletName
+	def createAccount(self, pub_key):
+		account_name = self._walletName
 		#create_accounta() Start
 		account_process = subprocess.Popen([self._cleos,"create","account","eosio",account_name,pub_key],stdout=subprocess.PIPE)
 		print "[!] CREATE ACCOUNT" + account_name
