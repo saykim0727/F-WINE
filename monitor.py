@@ -15,10 +15,10 @@ class Monitor:
 
 		os.system("ulimit -c unlimited")
 		os.system('echo "%s/core.%%e.%%p.%%t" > /proc/sys/kernel/core_pattern' % (core_dir))
-		print ("[!] COLLECT CORE_PATTERN"
+		print "[!] COLLECT CORE_PATTERN"
 
-	def crashMonitor(pid,contract):
-		#crash_check(child_pid,BUILD_DIR,contract) Start
+	#crash_check(child_pid,BUILD_DIR,contract) Start
+        def crashMonitor(pid,contract):
 		from shutil import move
 		import time
 		if psutil.pid_exists(pid) == False:
