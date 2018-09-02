@@ -2,6 +2,8 @@ import subprocess
 import psutil
 import time 
 import os
+import random
+import string
 
 PWD = os.getcwd()
 BUILD_DIR = PWD + "/../eos/build/"
@@ -33,7 +35,7 @@ class Nodeos :
 
 class Cleos():
 
-	def __init__(self, wallet_name ="firsttest", cleos_path = BUILD_DIR+"programs/cleos/cleos" ):
+	def __init__(self, wallet_name = "".join([random.choice(string.ascii_lowercase) for _ in range(8)]), cleos_path = BUILD_DIR+"programs/cleos/cleos" ):
 		self._cleos = cleos_path 
 		self._walletName = wallet_name
 		print self._cleos, self._walletName 
@@ -42,7 +44,7 @@ class Cleos():
 		wallet_process 	= subprocess.Popen([self._cleos,"wallet","create","-n",self._walletName],stdout=subprocess.PIPE)
 		for i in range(0,4):
 			stdout 	= wallet_process.stdout.readline()
-
+		
 		wallet_pw 		= (str(stdout[1:-2]))
 		with open("pw.txt","w") as f:
 			f.write(wallet_pw)
@@ -57,6 +59,9 @@ class Cleos():
 			f.write(pub_key)
 		key_process.wait()
 		print "[!] CREATE KEY"
+		
+		#self.lock_check(priv_key,wallet_pw)
+
 		import_process = subprocess.Popen([self._cleos,"wallet","import","-n",self._walletName,"--private-key",priv_key])
 		import_process.wait()
 		import_process2 = subprocess.Popen([self._cleos,"wallet","import","-n",self._walletName,"--private-key",eosio_key])
@@ -73,11 +78,6 @@ class Cleos():
 	def setContract(self, account_name , contract_path):
 		contract_dir = contract_path 
 		set_process = subprocess.Popen([self._cleos ,"set","contract",account_name,BUILD_DIR + contract_dir],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-		lock_check=""
-		for i in range(0,4):
-			lock_check=set_process.stderr.readline()
-        #       if lock_check == Error 3120003:
-       #Locked wallet
 		set_process.wait()
 		print "[!] SET CONTRACT"
 
@@ -86,3 +86,13 @@ class Cleos():
 		push_process.wait()
 		print "[!] PUSH CONTRACT"
 
+	def lock_check(self,priv_key,passwd):
+		lock_process = subprocess.Popen([self._cleos,"wallet","import","-n",self._walletName,"--private-key",priv_key],stderr=subprocess.PIPE)
+		lock_process.wait()
+		stdout = str(lock_process.stderr.readline())
+
+		if "Error 3120003: Locked wallet" in stdout :
+			unlock_process = subprocess.Popen([self._cleos,"wallet","unlock","-n",self._walletName,"--password",passwd],stdin=subprocess.PIPE)
+			unlock_process.stdin.write(passwd)
+			unlock_process.stdin.flush()
+			unlock_process.wait()
