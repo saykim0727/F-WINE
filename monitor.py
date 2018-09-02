@@ -15,8 +15,7 @@ class Monitor:
 		os.system('echo "%s/core.%%e.%%p.%%t" > /proc/sys/kernel/core_pattern' % (core_dir))
 		print "[!] COLLECT CORE_PATTERN"
 
-	#crash_check(child_pid,BUILD_DIR,contract) Start
-        def crashMonitor(self, pid,contract):
+	def crashMonitor(self, pid,contract):
 		from shutil import move
                 import psutil
 		import time
@@ -27,7 +26,4 @@ class Monitor:
 					os.mkdir("%s/%s" % (this._crash_dir, timer))
 					move("%s/%s" % (this._core_dir,filename), "%s/%s" % (this._crash_dir, timer))
 					move("%s/%s" % (BUILD_DIR,contract),"%s/%s" % (this._crash_dir,timer))
-
-		print "[!] CORE & CRASH data is moved"
-#return
-#crash_check() End
+					print "[!] CORE & CRASH data is moved"

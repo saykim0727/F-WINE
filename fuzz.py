@@ -20,11 +20,11 @@ pid = classNode.getChildPid(pid)
 classCleos = Cleos()
 pub_key = classCleos.createWallet()
 account = classCleos.createAccount(pub_key)
-classCleos.setContract(account, "/contracts/hello")
-classCleos.pushTransaction(account, "hi","[\"Test\"]")
+classCleos.setContract(account, "contracts/hello")
+classCleos.pushTransaction(account, "hi","[\"test\"]")
 
 classMonitor = Monitor()
-classMonitor.crashMonitor(pid,"/contracts/hello")
+classMonitor.crashMonitor(pid,"contracts/hello")
 
 #import signal
 #os.killpg(os.getpgid(proc.pid),signal.SIGTERM)
