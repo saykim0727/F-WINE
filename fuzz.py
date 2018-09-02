@@ -1,15 +1,3 @@
-
-#BUILD_DIR   = "/home/kim/eos/build"
-#NODEOS      = BUILD_DIR + "/programs/nodeos/nodeos"
-#CLEOS       = BUILD_DIR + "/programs/cleos/cleos"
-#'''
-#C_END = "\033[0m"
-#C_YELLOW =  "\033[33m"
-#C_RED = "\033[31m"
-#C_GREEN = "\033[32m"
-#C_CYAN = "\033[36m"
-#DIVISION = "%s----------------------------------%s" % (C_RED,C_END)
-#'''
 from nodeos import * 
 from monitor import *
 
@@ -26,7 +14,5 @@ classCleos.pushTransaction(account, "hi","[\"test\"]")
 classMonitor = Monitor()
 classMonitor.crashMonitor(pid,"contracts/hello")
 
-#import signal
-#os.killpg(os.getpgid(proc.pid),signal.SIGTERM)
 
 
