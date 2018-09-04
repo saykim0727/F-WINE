@@ -35,7 +35,7 @@ class Nodeos :
 
 class Cleos():
 
-	def __init__(self, wallet_name = "".join([random.choice(string.ascii_lowercase) for _ in range(8)]), cleos_path = BUILD_DIR+"programs/cleos/cleos" ):
+	def __init__(self, wallet_name = "".join([random.choice(string.ascii_lowercase) for _ in range(6)]), cleos_path = BUILD_DIR+"programs/cleos/cleos" ):
 		self._cleos = cleos_path 
 		self._walletName = wallet_name
 		#print self._cleos, self._walletName 
@@ -75,6 +75,7 @@ class Cleos():
 	def createAccount(self, pub_key):
 		account_name = self._walletName
 		account_process = subprocess.Popen([self._cleos,"create","account","eosio",account_name,pub_key],stdout=subprocess.PIPE)
+		account_process.wait()
 		print "[!] CREATE ACCOUNT " + account_name
 		return account_name
 
