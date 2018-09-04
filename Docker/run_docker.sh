@@ -3,9 +3,9 @@ NAME="efuzz"
 sudo docker rm $NAME
 sudo docker kill $NAME
 
-cp ../fuzz.py ./Docker/FUZZ/fuzz.py
-cp ../monitor.py ./Docker/FUZZ/monitor.py
-cp ../nodeos.py ./Docker/FUZZ/nodeos.py 
+cp ../fuzz.py ./FUZZ/fuzz.py
+cp ../monitor.py ./FUZZ/monitor.py
+cp ../nodeos.py ./FUZZ/nodeos.py 
 
 
 sudo docker build --tag $NAME:1.0 ./Docker/
