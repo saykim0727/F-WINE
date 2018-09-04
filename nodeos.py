@@ -5,12 +5,14 @@ import os
 import random
 import string
 
-PWD = os.getcwd()
-BUILD_DIR = PWD + "/../eos/build/"
-
 class Nodeos :	
-	def __init__ (self, nodeos_path = BUILD_DIR + "programs/nodeos/nodeos" ):
-		self._NODEOS = nodeos_path
+	def __init__ (self):
+                with open("./config.ini","r") as f :
+                    datalist = f.readlines()
+                    nodeoslist = datalist[1].split("=")
+                    self._NODEOS = nodeoslist[1][1:-2]
+                    #print repr(self._NODEOS)
+
 #		print self._NODEOS
 
 	def runNodeos(self):
@@ -34,11 +36,14 @@ class Nodeos :
 		return child_pid
 
 class Cleos():
-
-	def __init__(self, wallet_name = "".join([random.choice(string.ascii_lowercase) for _ in range(6)]), cleos_path = BUILD_DIR+"programs/cleos/cleos" ):
-		self._cleos = cleos_path 
+	def __init__(self, wallet_name = "".join([random.choice(string.ascii_lowercase) for _ in range(6)])):
+                with open("./config.ini","r") as f :
+                    dataList = f.readlines()
+                    self._cleos = (dataList[0].split("="))[1][1:-2]
+                    self._contract = (dataList[2].split("="))[1][1:-2]
+                    
 		self._walletName = wallet_name
-		#print self._cleos, self._walletName 
+                #print repr(self._contract)
 
 	def createWallet(self):
 #               print ' '.join([self._cleos,"wallet","create","-n",self._walletName])
@@ -77,7 +82,7 @@ class Cleos():
 
 	def setContract(self, account_name , contract_path):
 		contract_dir = contract_path 
-		set_process = subprocess.Popen([self._cleos ,"set","contract",account_name,BUILD_DIR + contract_dir],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+		set_process = subprocess.Popen([self._cleos ,"set","contract",account_name,self._contract],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 		set_process.wait()
 		print "[!] SET CONTRACT"
 
