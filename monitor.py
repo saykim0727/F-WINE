@@ -11,8 +11,6 @@ class Monitor:
 		if os.path.isdir(crash_dir) != True:
 			os.mkdir("/tmp/crash")
 
-		os.system("ulimit -c unlimited")
-		os.system('echo "%s/core.%%e.%%p.%%t" > /proc/sys/kernel/core_pattern' % (core_dir))
 		print "[!] COLLECT CORE_PATTERN"
 
 	def crashMonitor(self, pid,contract):
