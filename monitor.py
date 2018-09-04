@@ -6,7 +6,7 @@ class Monitor:
 		self._crash_dir = crash_dir 
 		with open("config.ini","r") as f:
 			datalist = f.readlines()
-			self._contract = (datalist[2].split(""))[1][1:-2]
+			self._contract = (datalist[2].split("="))[1][1:-2]
 
 		if os.path.isdir(core_dir) != True:
 			os.mkdir(core_dir)
