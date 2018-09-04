@@ -8,7 +8,7 @@ cp ../monitor.py ./FUZZ/monitor.py
 cp ../nodeos.py ./FUZZ/nodeos.py 
 
 
-sudo docker build --tag $NAME:1.0 ./Docker/
+sudo docker build --tag $NAME:1.0 ./
 
 PORT="-p 20000:20000"
 SHARED="-v `pwd`/tmp/:/tmp/" 
