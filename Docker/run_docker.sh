@@ -10,7 +10,7 @@ cp -r /home/k1rh4/GIT/eos/build/contracts/hello ./FUZZ
 sudo docker build --tag $NAME:1.0 ./
 
 PORT="-p 20000:20000"
-SHARED="-v `pwd`/tmp/:/tmp/" 
+SHARED="-v `pwd`/SEED/:/SEED/"
 OPTION="--rm --privileged --cap-add=SYS_PTRACE --ulimit core=-1 --security-opt seccomp=unconfined"
 #OPTION=" --read-only --rm -v `pwd`/tmp/:/tmp"
 
