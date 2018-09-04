@@ -47,8 +47,6 @@ class Cleos():
 			stdout 	= wallet_process.stdout.readline()
 		
 		wallet_pw   = (str(stdout[1:-2]))
-		with open("pw.txt","w") as f:
-			f.write(wallet_pw)
 		
 		wallet_process.wait()
 		print "[!] CREATE WALLET"
@@ -59,8 +57,6 @@ class Cleos():
                 priv_key = str(key_process.stdout.readline()[13:-1])
             
 		pub_key = str(key_process.stdout.readline()[12:-1])
-		with open("pub_key.txt","w") as f:
-			f.write(pub_key)
 		key_process.wait()
 		print "[!] CREATE KEY"
 		
