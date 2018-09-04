@@ -1,0 +1,3 @@
+CLEOS="/EOS/cleos"
+NODEOS="/EOS/nodeos"
+CONTRACT="/FUZZ/hello/"

@@ -16,13 +16,10 @@ RUN apt-get install -y gdb
 RUN apt-get install -y strace
 RUN apt-get install -y libssl1.0.0
 RUN apt-get install -y clang
-
-RUN mkdir /FUZZ
+RUN pip install psutil
 
 ADD ./EOS/ /EOS/
-COPY ../fuzz.py /FUZZ/
-COPY ../monitor.py /FUZZ/
-COPY ../nodeos.py /FUZZ/
+ADD ./FUZZ/ /FUZZ/
 
 RUN ulimit -c unlimited
 RUN mkdir /CORE/
