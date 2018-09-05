@@ -12,23 +12,23 @@ class Fuzzer:
 		radamsa = Radamsa()
 		pid = classNode.runNodeos()
 		pid = classNode.getChildPid(pid)
-                print "[!] Nodeos pid : %d " % pid 
+		print "[!] Nodeos pid : %d " % pid 
 		classCleos = Cleos()
 		classMonitor = Monitor()
 		pub_key = classCleos.createWallet()
 		account = classCleos.createAccount(pub_key)
-
 		while True:
+			time.sleep(0.4)
 			radamsa.make_testcase()
 			classCleos.setContract(account)
 			classCleos.pushTransaction(account, "hi","[\"test\"]")
 			result = classMonitor.crashMonitor(pid)
 			if bool(result) == True:
-				return "Error"
+				break
 
 
 if __name__ == "__main__":
 	fuzzer = Fuzzer()
 	while True:
-	    fuzzer.setup()
+		fuzzer.setup()
 	

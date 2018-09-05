@@ -19,13 +19,15 @@ class Monitor:
                 import psutil
 		import time
 		if psutil.pid_exists(pid) == False:
-                    for filename in  os.listdir(self._core_dir):
-                        if filename.find("core")>=0  and (filename.split(".")[-1].find("6") == -1) :
-                                timer = time.time()
-                                os.mkdir("%s/%s" % (self._crash_dir, timer))
-                                move("%s/%s" % (self._core_dir,filename), "%s/%s" % (self._crash_dir, timer))
-                                move("%s" % (self._contract),"%s/%s" % (self._crash_dir,timer))
-                                print "[!] CORE & CRASH data is moved"
-                else:
-                    print "[!] Process still alive"
+			for filename in  os.listdir(self._core_dir):
+				if filename.find("core")>=0  and (filename.split(".")[-1].find("6") == -1) :
+					timer = time.time()
+					os.mkdir("%s/%s" % (self._crash_dir, timer))
+					move("%s/%s" % (self._core_dir,filename), "%s/%s" % (self._crash_dir, timer))
+					move("%s" % (self._contract),"%s/%s" % (self._crash_dir,timer))
+					print "[!] CORE & CRASH data is moved"
+				else:
+					print "[!] Process still alive"
+			return True
+		return False
 

@@ -16,6 +16,7 @@ class Nodeos :
 	def runNodeos(self):
 		proc = subprocess.Popen([self._NODEOS , "-e", "-p" , "eosio","--plugin" ,"eosio::chain_api_plugin" , "--plugin" ,"eosio::history_api_plugin" ,"--contracts-console","--delete-all-blocks","--hard-replay-blockchain" ],stdout=subprocess.PIPE,stderr=subprocess.PIPE) #need stdout, stderr redirection
 		pid = proc.pid
+		time.sleep(3)
 		return pid 
 
 	def getChildPid(self, pid):
@@ -76,8 +77,7 @@ class Cleos():
 		return account_name
 
 	def setContract(self, account_name):
-		set_process = subprocess.Popen([self._cleos ,"set","contract",account_name,"./input"],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-#		set_process = subprocess.Popen([self._cleos ,"set","contract",account_name,self._contract],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+		set_process = subprocess.Popen([self._cleos ,"set","contract",account_name,"./hello"],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 		set_process.wait()
 		print "[!] SET CONTRACT"
 
