@@ -20,8 +20,8 @@ RUN pip install psutil
 
 ADD ./EOS/ /EOS/
 ADD ./FUZZ/ /FUZZ/
-
+ADD ./TEST/ /TEST/
 RUN ulimit -c unlimited
 RUN mkdir /CORE/
-CMD echo "/CORE/core.%e.%p-%s" > /proc/sys/kernel/core_pattern
+CMD echo "/CORE/core.%e.%p.%s" > /proc/sys/kernel/core_pattern
 
