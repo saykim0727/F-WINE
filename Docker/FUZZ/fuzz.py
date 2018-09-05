@@ -14,7 +14,7 @@ class Fuzzer:
 		pid = classNode.getChildPid(pid)
 		print "[!] Nodeos pid : %d " % pid 
 		classCleos = Cleos()
-		classMonitor = Monitor()
+		classMonitor = Monitor("/CORE/")
 		pub_key = classCleos.createWallet()
 		account = classCleos.createAccount(pub_key)
 		i=0
@@ -30,12 +30,14 @@ class Fuzzer:
 			classCleos.setContract(account)
 			classCleos.pushTransaction(account, "hi","[\"test\"]")
 			result = classMonitor.crashMonitor(pid)
-			if bool(result) == True:
-				break
-
+			if result == True:
+                                p = psutil.Process(pid)
+                                p.kill()
+			        return 
+            
 
 if __name__ == "__main__":
-	fuzzer = Fuzzer()
-	while True:
+	while 1:
+	        fuzzer = Fuzzer()
 		fuzzer.setup()
 	

@@ -6,7 +6,7 @@ class Monitor:
 		self._crash_dir = crash_dir 
 		with open("/FUZZ/config.ini","r") as f:
 			datalist = f.readlines()
-			self._contract = (datalist[2].split("="))[1][1:-2]
+			self._contract = (datalist[4].split("="))[1][1:-2]
 
 		if os.path.isdir(core_dir) != True:
 			os.mkdir(core_dir)
@@ -18,7 +18,8 @@ class Monitor:
 		from shutil import move
                 import psutil
 		import time
-		if psutil.pid_exists(pid) == False:
+                if 1==1 :
+		#if psutil.pid_exists(pid) == False:
 			for filename in  os.listdir(self._core_dir):
 				if filename.find("core")>=0  and (filename.split(".")[-1].find("6") == -1) :
 					timer = time.time()
@@ -28,6 +29,6 @@ class Monitor:
 					print "[!] CORE & CRASH data is moved"
 				else:
 					print "[!] Process still alive"
-			return True
+			return False
 		return False
 
