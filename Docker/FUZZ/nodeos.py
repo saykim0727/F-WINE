@@ -11,28 +11,25 @@ class Nodeos :
                     datalist = f.readlines()
                     nodeoslist = datalist[1].split("=")
                     self._NODEOS = nodeoslist[1][1:-2]
-                    #print repr(self._NODEOS)
-
+                    print repr(self._NODEOS)
+			
 #		print self._NODEOS
 
 	def runNodeos(self):
 		proc = subprocess.Popen([self._NODEOS , "-e", "-p" , "eosio","--plugin" ,"eosio::chain_api_plugin" , "--plugin" ,"eosio::history_api_plugin" ,"--contracts-console","--delete-all-blocks","--hard-replay-blockchain" ],stdout=subprocess.PIPE,stderr=subprocess.PIPE) #need stdout, stderr redirection
 		pid = proc.pid
-		time.sleep(3)
-		#print "%s\n%s[!] RUN NODEOS %s" % (DIVISION,C_YELLOW, C_END)
-#		print "[!] RUN NODEOS"
 		return pid 
 
 	def getChildPid(self, pid):
 		current_process =  psutil.Process(pid)
 		children 	= current_process.children(recursive=True)
 		child_pid 	= 0
-#		print('%s[*] Nodeos pid is {}'.format(pid))
-		for child in children :
-			try:
+		if len(children) == 0:
+			child_pid = pid
+		else:
+			for child in children :
 				child_pid = child.pid
-			except:
-				child_pid = pid
+
 		return child_pid
 
 class Cleos():
@@ -57,7 +54,7 @@ class Cleos():
 		print "[!] CREATE WALLET"
 		eosio_key = "5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"
 		key_process = subprocess.Popen([self._cleos,"create","key","--to-console"] ,stdout=subprocess.PIPE)
-	        key_process.wait()
+		key_process.wait()
 
                 priv_key = str(key_process.stdout.readline()[13:-1])
             
@@ -80,9 +77,9 @@ class Cleos():
 		print "[!] CREATE ACCOUNT " + account_name
 		return account_name
 
-	def setContract(self, account_name , contract_path):
-		contract_dir = contract_path 
-		set_process = subprocess.Popen([self._cleos ,"set","contract",account_name,self._contract],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+	def setContract(self, account_name):
+		set_process = subprocess.Popen([self._cleos ,"set","contract",account_name,"./input"],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+#		set_process = subprocess.Popen([self._cleos ,"set","contract",account_name,self._contract],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 		set_process.wait()
 		print "[!] SET CONTRACT"
 
