@@ -21,6 +21,8 @@ RUN pip install psutil
 ADD ./EOS/ /EOS/
 ADD ./FUZZ/ /FUZZ/
 ADD ./TEST/ /TEST/
+ADD ./start.sh /FUZZ/start.sh
+CMD chmod 755 /FUZZ/start.sh
 RUN ulimit -c unlimited
 RUN mkdir /CORE/
 CMD echo "/CORE/core.%e.%p.%s" > /proc/sys/kernel/core_pattern

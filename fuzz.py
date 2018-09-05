@@ -17,8 +17,15 @@ class Fuzzer:
 		classMonitor = Monitor()
 		pub_key = classCleos.createWallet()
 		account = classCleos.createAccount(pub_key)
+		i=0
 		while True:
-			time.sleep(0.4)
+                        i = i +1
+                        if(i % 20 == 0) :
+                                p = psutil.Process(pid)
+                                p.kill()
+
+                                break;
+			time.sleep(0.2)
 			radamsa.make_testcase()
 			classCleos.setContract(account)
 			classCleos.pushTransaction(account, "hi","[\"test\"]")

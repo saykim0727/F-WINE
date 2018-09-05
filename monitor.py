@@ -4,7 +4,7 @@ class Monitor:
 	def __init__(self, core_dir = "/tmp/core" , crash_dir = "/tmp/crash" ):
 		self._core_dir   = core_dir
 		self._crash_dir = crash_dir 
-		with open("config.ini","r") as f:
+		with open("/FUZZ/config.ini","r") as f:
 			datalist = f.readlines()
 			self._contract = (datalist[2].split("="))[1][1:-2]
 

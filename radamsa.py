@@ -4,7 +4,7 @@ import shutil
 
 class Radamsa :
 	def __init__ (self) : 
-		with open("./config.ini","r") as f :
+		with open("/FUZZ/config.ini","r") as f :
 			datalist = f.readlines()
 			self.contract = str((datalist[2].split("="))[1][1:-2])
 			self.seed = str((datalist[2].split("="))[1][1:-2])+"/hello.wasm"
