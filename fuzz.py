@@ -1,19 +1,34 @@
 from nodeos import * 
 from monitor import *
+from radamsa import *
 
-classNode = Nodeos()
-pid = classNode.runNodeos()
-pid = classNode.getChildPid(pid)
+class Fuzzer:
+	def __init__ (self) :
+		pass
+	
+	def setup(self):
+		classNode = Nodeos()
+		radamsa = Radamsa()
+		pid = classNode.runNodeos()
+		pid = classNode.getChildPid(pid)
 
-classCleos = Cleos()
-classMonitor = Monitor()
+		classCleos = Cleos()
+		classMonitor = Monitor()
+		pub_key = classCleos.createWallet()
+		account = classCleos.createAccount(pub_key)
 
-pub_key = classCleos.createWallet()
-account = classCleos.createAccount(pub_key)
-classCleos.setContract(account)
-classCleos.pushTransaction(account, "hi","[\"test\"]")
+		while True:
+			classCleos.setContract(account)
+			radamsa.make_testcase()
+			classCleos.pushTransaction(account, "hi","[\"test\"]")
+			result = classMonitor.crashMonitor(pid)
+			time.sleep(5)
+			if bool(result) == True:
+				return "Error"
 
-classMonitor.crashMonitor(pid)
 
-
-
+if __name__ == "__main__":
+	fuzzer = Fuzzer()
+	while True:
+		fuzzer.setup()
+	
