@@ -1,5 +1,5 @@
 #!/bin/sh
-NAME="efuzz"
+NAME="efuzz2"
 sudo docker rm $NAME
 sudo docker kill $NAME
 
@@ -10,7 +10,7 @@ cp ../radamsa.py ./FUZZ/radamsa.py
 
 sudo docker build --tag $NAME:1.0 ./
 
-PORT="-p 20000:20000"
+#PORT="-p 20000:20000"
 SHARED="-v `pwd`/SEED/:/SEED/"
 OPTION="--rm --privileged --cap-add=SYS_PTRACE --ulimit core=-1 --security-opt seccomp=unconfined"
 #OPTION=" --read-only --rm -v `pwd`/tmp/:/tmp"
