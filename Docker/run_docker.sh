@@ -16,7 +16,7 @@ cp ../radamsa.py ./FUZZ/radamsa.py
 sudo docker build --tag $NAME:1.0 ./
 
 #PORT="-p 20000:20000"
-SHARED="-v `pwd`/SEED/:/SEED/"
+SHARED="-v `pwd`/CRASH/:/tmp/crash"
 OPTION="--rm --privileged --cap-add=SYS_PTRACE --ulimit core=-1 --security-opt seccomp=unconfined"
 #OPTION=" --read-only --rm -v `pwd`/tmp/:/tmp"
 
