@@ -23,5 +23,5 @@ ADD ./FUZZ/ /FUZZ/
 
 RUN ulimit -c unlimited
 RUN mkdir /CORE/
-CMD echo "/CORE/core.%e.%p.%t" > /proc/sys/kernel/core_pattern
+CMD echo "/CORE/core.%e.%p.%s" > /proc/sys/kernel/core_pattern
 
