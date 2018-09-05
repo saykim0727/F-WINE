@@ -11,9 +11,7 @@ class Nodeos :
                     datalist = f.readlines()
                     nodeoslist = datalist[1].split("=")
                     self._NODEOS = nodeoslist[1][1:-2]
-                    print repr(self._NODEOS)
-			
-#		print self._NODEOS
+                    #print repr(self._NODEOS)
 
 	def runNodeos(self):
 		proc = subprocess.Popen([self._NODEOS , "-e", "-p" , "eosio","--plugin" ,"eosio::chain_api_plugin" , "--plugin" ,"eosio::history_api_plugin" ,"--contracts-console","--delete-all-blocks","--hard-replay-blockchain" ],stdout=subprocess.PIPE,stderr=subprocess.PIPE) #need stdout, stderr redirection
