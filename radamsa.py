@@ -7,12 +7,12 @@ class Radamsa :
 		with open("./config.ini","r") as f :
 			datalist = f.readlines()
 			self.contract = str((datalist[2].split("="))[1][1:-2])
-			self.seed = str((datalist[2].split("="))[1][1:-2])+"/hello.wast"
-			self.input = "./input/hello.wast"
+			self.seed = str((datalist[2].split("="))[1][1:-2])+"/hello.wasm"
+			self.input = "./hello/hello.wasm"
 			self.radamsa = (datalist[3].split("="))[1][1:-2]
-		if os.path.isdir("./input") !=True:
-			os.mkdir("./input")
-		shutil.copyfile(self.contract+"/hello.abi","./input/hello.abi")
+		if os.path.isdir("./hello") !=True:
+			os.mkdir("./hello")
+		shutil.copyfile(self.contract+"/hello.abi","./hello/hello.abi")
 	
 
 	def make_testcase(self):
