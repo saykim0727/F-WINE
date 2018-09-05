@@ -18,9 +18,6 @@ class Nodeos :
 	def runNodeos(self):
 		proc = subprocess.Popen([self._NODEOS , "-e", "-p" , "eosio","--plugin" ,"eosio::chain_api_plugin" , "--plugin" ,"eosio::history_api_plugin" ,"--contracts-console","--delete-all-blocks","--hard-replay-blockchain" ],stdout=subprocess.PIPE,stderr=subprocess.PIPE) #need stdout, stderr redirection
 		pid = proc.pid
-		time.sleep(3)
-		#print "%s\n%s[!] RUN NODEOS %s" % (DIVISION,C_YELLOW, C_END)
-#		print "[!] RUN NODEOS"
 		return pid 
 
 	def getChildPid(self, pid):

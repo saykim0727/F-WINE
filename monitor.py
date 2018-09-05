@@ -18,7 +18,7 @@ class Monitor:
 		from shutil import move
                 import psutil
 		import time
-		if psutil.pid_exists(int(pid,16)) == False:
+		if psutil.pid_exists(pid) == False:
                     for filename in  os.listdir(self._core_dir):
                         if filename.find("core")>=0  and (filename.split(".")[-1].find("6") == -1) :
                                 timer = time.time()

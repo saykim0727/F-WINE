@@ -1,6 +1,7 @@
 from nodeos import * 
 from monitor import *
 from radamsa import *
+import sys
 
 class Fuzzer:
 	def __init__ (self) :
@@ -22,7 +23,6 @@ class Fuzzer:
 			radamsa.make_testcase()
 			classCleos.pushTransaction(account, "hi","[\"test\"]")
 			result = classMonitor.crashMonitor(pid)
-			time.sleep(5)
 			if bool(result) == True:
 				return "Error"
 
@@ -30,5 +30,5 @@ class Fuzzer:
 if __name__ == "__main__":
 	fuzzer = Fuzzer()
 	while True:
-		fuzzer.setup()
+	    fuzzer.setup()
 	
