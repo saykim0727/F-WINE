@@ -21,6 +21,7 @@ RUN pip install psutil
 ADD ./EOS/ /EOS/
 ADD ./FUZZ/ /FUZZ/
 ADD ./TEST/ /TEST/
+ADD ./SEED/ /SEED/
 ADD ./start.sh /FUZZ/start.sh
 CMD chmod 755 /FUZZ/start.sh
 RUN ulimit -c unlimited
