@@ -12,7 +12,7 @@ class Radamsa :
 			self.radamsa = (datalist[3].split("="))[1][1:-2]
 		if os.path.isdir("./input") !=True:
 			os.mkdir("./input")
-		shutil.copyfile(self.seed,"./input/hello.abi")
+		shutil.copyfile(self.contract+"/hello.abi","./input/hello.abi")
 	
 
 	def make_testcase(self):
