@@ -21,7 +21,8 @@ class Monitor:
                 if 1==1 :
 		#if psutil.pid_exists(pid) == False:
 			for filename in  os.listdir(self._core_dir):
-				if filename.find("core")>=0  and (filename.split(".")[-1].find("6") == -1) :
+				#if filename.find("core")>=0  and (filename.split(".")[-1].find("6") == -1) :
+				if filename.find("core")>=0 :
 					timer = time.time()
 					os.mkdir("%s/%s" % (self._crash_dir, timer))
 					move("%s/%s" % (self._core_dir,filename), "%s/%s" % (self._crash_dir, timer))
@@ -29,7 +30,6 @@ class Monitor:
 					print "[!] CORE & CRASH data is moved"
 				else:
 					print "[!] Process still alive"
-                        print "[D] crash for"
 			return False
 		return False
 

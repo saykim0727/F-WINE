@@ -18,6 +18,13 @@ RUN apt-get install -y libssl1.0.0
 RUN apt-get install -y clang
 RUN pip install psutil
 
+RUN apt-get install -y cron
+
+ADD ./root_crontab /var/spool/cron/crontabs/root
+RUN chown root:crontab /var/spool/cron/crontabs/root
+
+
+
 ADD ./EOS/ /EOS/
 ADD ./FUZZ/ /FUZZ/
 ADD ./TEST/ /TEST/
