@@ -22,7 +22,7 @@ RUN apt-get install -y cron
 
 ADD ./root_crontab /var/spool/cron/crontabs/root
 RUN chown root:crontab /var/spool/cron/crontabs/root
-
+RUN chmod 600 /var/spool/cron/crontabs/root
 
 
 ADD ./EOS/ /EOS/
@@ -30,8 +30,9 @@ ADD ./FUZZ/ /FUZZ/
 ADD ./TEST/ /TEST/
 ADD ./SEED/ /SEED/
 ADD ./start.sh /FUZZ/start.sh
+ADD ./entry.sh /entry.sh
 CMD chmod 755 /FUZZ/start.sh
+CMD chmod 755 /entry.sh 
 RUN ulimit -c unlimited
 RUN mkdir /CORE/
-CMD echo "/CORE/core.%e.%p.%s" > /proc/sys/kernel/core_pattern
-
+CMD echo "/CORE/core.%e.%p.%s" > /proc/sys/kernel/core_pattern 

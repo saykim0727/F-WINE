@@ -1,1 +1,1 @@
-*/10 * * * * /FUZZ/start.sh
+* * * * * /FUZZ/start.sh >> /var/log/cron.log 2>&1
