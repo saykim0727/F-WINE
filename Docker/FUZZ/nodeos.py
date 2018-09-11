@@ -31,6 +31,7 @@ class Cleos():
                     dataList = f.readlines()
                     self._cleos = (dataList[0].split("="))[1][1:-2]
                     self._contract = (dataList[2].split("="))[1][1:-2]
+                    self._testcase = (dataList[4].split("="))[1][1:-2]
                     
 		self._walletName = wallet_name
                 #print repr(self._contract)
@@ -55,7 +56,7 @@ class Cleos():
 		key_process.wait()
 		#print "[!] CREATE KEY"
 		
-		#self.lock_check(priv_key,wallet_pw)
+		#self.loctestcasepriv_key,wallet_pw)
 		import_process = subprocess.Popen([self._cleos,"wallet","import","-n",self._walletName,"--private-key",priv_key])
 		import_process.wait()
 		import_process2 = subprocess.Popen([self._cleos,"wallet","import","-n",self._walletName,"--private-key",eosio_key])
@@ -71,7 +72,7 @@ class Cleos():
 		return account_name
 
 	def setContract(self, account_name):
-		set_process = subprocess.Popen([self._cleos ,"set","contract",account_name,"./hello"],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+		set_process = subprocess.Popen([self._cleos ,"set","contract",account_name,self._testcase],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 		set_process.wait()
 		#print "[!] SET CONTRACT"
 
