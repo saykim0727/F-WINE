@@ -1,10 +1,11 @@
 #!/bin/sh 
 ID="efuzz"
+NAME=$ID 
+NAME=""
 if [ $1 ] 
 then
-	ID=$1
+	NAME=$1
 fi
-NAME=$ID 
 sudo docker rm $NAME
 sudo docker kill $NAME
 
