@@ -1,4 +1,5 @@
 import os
+import shutil
 
 class Monitor:
 	def __init__(self, core_dir = "/tmp/core" , crash_dir = "/tmp/crash" ):
@@ -24,12 +25,15 @@ class Monitor:
 				#if filename.find("core")>=0  and (filename.split(".")[-1].find("6") == -1) :
 				if filename.find("core")>=0 :
 					timer = time.time()
-					os.mkdir("%s/%s" % (self._crash_dir, timer))
+					if os.path.isdir("%s/%s" % (self._crash_dir,timer))!=True:
+						os.mkdir("%s/%s" % (self._crash_dir, timer))
+					else :
+						os.mkdir("%s/%s" % (self._crash_dir, timer+0.5))
 					move("%s/%s" % (self._core_dir,filename), "%s/%s" % (self._crash_dir, timer))
-					move("%s" % (self._contract),"%s/%s" % (self._crash_dir,timer))
+					shutil.copytree("%s" % (self._contract),"%s/%s/testcasse" % (self._crash_dir,timer))
 					print "[!] CORE & CRASH data is moved"
 				else:
 					print "[!] Process still alive"
-			return False
+			return True
 		return False
 

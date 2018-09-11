@@ -14,22 +14,16 @@ class Nodeos :
                     #print repr(self._NODEOS)
 
 	def runNodeos(self):
-		proc = subprocess.Popen([self._NODEOS , "-e", "-p" , "eosio","--plugin" ,"eosio::chain_api_plugin" , "--plugin" ,"eosio::history_api_plugin" ,"--contracts-console","--delete-all-blocks","--hard-replay-blockchain" ],stdout=subprocess.PIPE,stderr=subprocess.PIPE) #need stdout, stderr redirection
-		pid = proc.pid
-		time.sleep(3)
-		return pid 
+		self._proc = subprocess.Popen([self._NODEOS , "-e", "-p" , "eosio","--plugin" ,"eosio::chain_api_plugin" , "--plugin" ,"eosio::history_api_plugin" ,"--contracts-console","--delete-all-blocks","--hard-replay-blockchain" ],stdout=subprocess.PIPE,stderr=subprocess.PIPE) #need stdout, stderr redirection
+		time.sleep(3) 
 
-	def getChildPid(self, pid):
-		current_process =  psutil.Process(pid)
-		children 	= current_process.children(recursive=True)
-		child_pid 	= 0
-		if len(children) == 0:
-			child_pid = pid
-		else:
-			for child in children :
-				child_pid = child.pid
+	def getChildPid(self):
+		pid = self._proc.pid
+		return pid
 
-		return child_pid
+	def pskill(self):
+		self._proc.terminate()
+		self._proc.wait()
 
 class Cleos():
 	def __init__(self, wallet_name = "".join([random.choice(string.ascii_lowercase) for _ in range(6)])):
