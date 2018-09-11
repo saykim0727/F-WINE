@@ -23,14 +23,25 @@ for fileName in dirList :
 crashType   = coreDump.split(".")[-1]
 crashFile   = "../EOS/" + str(coreDump.split(".")[-3])
 
-p = process(["gdb","-q",crashFile,"-c",coreDump],level='CRITICAL')
+p = process(["gdb","-q",crashFile,"-c",coreDump],level='critical')
 p.recvuntil("(gdb)")
 p.sendline("bt")
-callStack = p.recvuntil("(gdb)")
-print callStack 
+callStack =""
+while 1:
+    callStack += p.recv(1000000)
+    if(callStack.find("main()") >=0 or callStack.find("(gdb)")>=0):
+        break;
+    p.sendline("\r\n")
+
+callStack += p.recvuntil("(gdb)")
+callStackList = callStack.split("#")
+for data in callStackList:
+    strData = (data[0:40]+"...." + data[-40:-1]).split("\n")[0]
+    print strData
+
+
 
 print "[!] crashType = %s " %(crashType)
 print "[!] crashFile = %s " %(crashFile)
-
 
 
