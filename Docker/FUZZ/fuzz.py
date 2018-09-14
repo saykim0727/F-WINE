@@ -31,7 +31,7 @@ class Fuzzer:
 			result = classMonitor.crashMonitor(pid)
 			if result == True:
 				classNode.pskill()
-				break							
+				break
 		return 
             
 

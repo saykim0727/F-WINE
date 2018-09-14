@@ -8,7 +8,6 @@ class Monitor:
 		with open("/FUZZ/config.ini","r") as f:
 			datalist = f.readlines()
                         self._contract = ConfigParsor("CONTRACT",datalist)
-			#self._contract = (datalist[4].split("="))[1][1:-2]
 
 		if os.path.isdir(core_dir) != True:
 			os.mkdir(core_dir)
@@ -31,8 +30,8 @@ class Monitor:
 			move("%s/%s" % (self._core_dir,filename), "%s/%s" % (self._crash_dir, timer))
 			shutil.copytree("%s" % (self._contract),"%s/%s/testcasse" % (self._crash_dir,timer))
 			return True
-		#		print "[!] CORE & CRASH data is moved"
-			#	else:
-			#		print "[!] Process still alive"
+		            # print "[!] CORE & CRASH data is moved"
+			    # else:
+			    # print "[!] Process still alive"
 		return False
 
