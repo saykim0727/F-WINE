@@ -9,11 +9,6 @@ fi
 sudo docker rm $NAME
 sudo docker kill $NAME
 
-cp ../fuzz.py ./FUZZ/fuzz.py
-cp ../monitor.py ./FUZZ/monitor.py
-cp ../nodeos.py ./FUZZ/nodeos.py 
-cp ../radamsa.py ./FUZZ/radamsa.py
-
 sudo docker build --tag $NAME:1.0 ./
 
 #PORT="-p 20000:20000"
