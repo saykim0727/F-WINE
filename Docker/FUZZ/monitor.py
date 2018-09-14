@@ -1,6 +1,6 @@
 import os
 import shutil
-from ConfigParsor import ConfigParsor
+from configParsor import ConfigParsor
 class Monitor:
 	def __init__(self, core_dir = "/tmp/core" , crash_dir = "/tmp/crash" ):
 		self._core_dir   = core_dir
