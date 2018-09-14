@@ -10,7 +10,7 @@ class Fuzzer:
 	
 	def setup(self):
 		classNode = Nodeos()
-		radamsa = Mutator()
+		mutator = Mutator()
 		classNode.runNodeos()
 		pid = classNode.getChildPid()
 		print "[!] Nodeos pid : %d " % pid 
@@ -25,7 +25,7 @@ class Fuzzer:
 				classNode.pskill()
 				break
 			time.sleep(0.2)
-			radamsa.make_testcase()
+			mutator.make_testcase()
 			classCleos.setContract(account)
 			classCleos.pushTransaction(account, "hi","[\"test\"]")
 			result = classMonitor.crashMonitor(pid)
