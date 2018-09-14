@@ -22,11 +22,9 @@ class Monitor:
 		for filename in  os.listdir(self._core_dir):
 			#if filename.find("core")>=0  and (filename.split(".")[-1].find("6") == -1) :
 			timer = time.time()
-			if os.path.isdir("%s/%s" % (self._crash_dir,timer))!=True:
-				os.mkdir("%s/%s" % (self._crash_dir, timer))
-			else :
+			if os.path.isdir("%s/%s" % (self._crash_dir,timer))==True:
 				timer = tiemr + 0.5
-				os.mkdir("%s/%s" % (self._crash_dir, timer))
+			os.mkdir("%s/%s" % (self._crash_dir, timer))
 			move("%s/%s" % (self._core_dir,filename), "%s/%s" % (self._crash_dir, timer))
 			shutil.copytree("%s" % (self._contract),"%s/%s/testcasse" % (self._crash_dir,timer))
 			return True
