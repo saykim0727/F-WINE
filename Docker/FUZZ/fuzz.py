@@ -20,16 +20,14 @@ class Fuzzer:
 		account = classCleos.createAccount(pub_key)
 		i=0
 		while True:
-			i = i +1
-			if(i % 20 == 0) :
-				classNode.pskill()
-				break
 			time.sleep(0.2)
 			mutator.make_testcase()
 			classCleos.setContract(account)
 			classCleos.pushTransaction(account, "hi","[\"test\"]")
 			result = classMonitor.crashMonitor(pid)
-			if result == True:
+
+			i = i +1
+			if result == True or i % 20 == 0 :
 				classNode.pskill()
 				break
 		return 
