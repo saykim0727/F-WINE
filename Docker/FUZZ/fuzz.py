@@ -1,6 +1,6 @@
 from nodeos import * 
 from monitor import *
-from radamsa import *
+from mutator  import *
 import os
 import sys
 
@@ -10,7 +10,7 @@ class Fuzzer:
 	
 	def setup(self):
 		classNode = Nodeos()
-		radamsa = Radamsa()
+		radamsa = Mutator()
 		classNode.runNodeos()
 		pid = classNode.getChildPid()
 		print "[!] Nodeos pid : %d " % pid 
