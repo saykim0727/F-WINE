@@ -19,21 +19,19 @@ class Monitor:
 		from shutil import move
                 import psutil
 		import time
-                if 1==1 :
-		#if psutil.pid_exists(pid) == False:
-			for filename in  os.listdir(self._core_dir):
-				#if filename.find("core")>=0  and (filename.split(".")[-1].find("6") == -1) :
-				if filename.find("core")>=0 :
-					timer = time.time()
-					if os.path.isdir("%s/%s" % (self._crash_dir,timer))!=True:
-						os.mkdir("%s/%s" % (self._crash_dir, timer))
-					else :
-						os.mkdir("%s/%s" % (self._crash_dir, timer+0.5))
-					move("%s/%s" % (self._core_dir,filename), "%s/%s" % (self._crash_dir, timer))
-					shutil.copytree("%s" % (self._contract),"%s/%s/testcasse" % (self._crash_dir,timer))
-					print "[!] CORE & CRASH data is moved"
-				else:
-					print "[!] Process still alive"
+		for filename in  os.listdir(self._core_dir):
+			#if filename.find("core")>=0  and (filename.split(".")[-1].find("6") == -1) :
+			timer = time.time()
+			if os.path.isdir("%s/%s" % (self._crash_dir,timer))!=True:
+				os.mkdir("%s/%s" % (self._crash_dir, timer))
+			else :
+				timer = tiemr + 0.5
+				os.mkdir("%s/%s" % (self._crash_dir, timer))
+			move("%s/%s" % (self._core_dir,filename), "%s/%s" % (self._crash_dir, timer))
+			shutil.copytree("%s" % (self._contract),"%s/%s/testcasse" % (self._crash_dir,timer)
 			return True
+		#		print "[!] CORE & CRASH data is moved"
+			#	else:
+			#		print "[!] Process still alive"
 		return False
 
