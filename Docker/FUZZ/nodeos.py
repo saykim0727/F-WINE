@@ -10,9 +10,6 @@ class Nodeos :
                 with open("/FUZZ/config.ini","r") as f :
                     datalist = f.readlines()
                     self._NODEOS = ConfigParsor("NODEOS",datalist)
-                    #nodeoslist = datalist[1].split("=")
-                    #self._NODEOS = nodeoslist[1][1:-2]
-                    #print repr(self._NODEOS)
 
 	def runNodeos(self):
                 cmdline = [self._NODEOS , "-e", "-p" , "eosio","--plugin" ,"eosio::chain_api_plugin" , "--plugin" ,"eosio::history_api_plugin" ,"--contracts-console","--delete-all-blocks","--hard-replay-blockchain" ]
@@ -35,12 +32,7 @@ class Cleos():
                     self._sName = ConfigParsor("SEED_NAME",dataList)
                     self._contract = ConfigParsor("CONTRACT", dataList) + self._sName
                     self._testcase = ConfigParsor("TESTCASE",dataList) + self._sName
-
-                    #self._cleos = (dataList[0].split("="))[1][1:-2]
-                    #self._contract = (dataList[2].split("="))[1][1:-2]
-                    #self._testcase = (dataList[4].split("="))[1][1:-2]
 		self._walletName = wallet_name
-                #print repr(self._contract)
 
 	def createWallet(self):
 		cmdline = [self._cleos,"wallet","create","-n",self._walletName]
