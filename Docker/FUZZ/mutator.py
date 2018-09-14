@@ -6,12 +6,12 @@ class Mutator :
 	def __init__ (self) : 
 		with open("/FUZZ/config.ini","r") as f :
 			datalist = f.readlines()
-                        self.sName = ConfigParsor("SEED_NAME",datalist)
+			self.sName = ConfigParsor("SEED_NAME",datalist)
 			self.seed_dir = ConfigParsor("CONTRACT", datalist) + self.sName +"/"
-                        self.seed = self.seed_dir + self.sName + ".wast" 
-                        self.input_dir = ConfigParsor("TESTCASE", datalist) +self.sName +"/"
-                        self.input = self.input_dir + self.sName + ".wast"
-                        self.mutator = ConfigParsor("RADAMSA", datalist) 
+			self.seed = self.seed_dir + self.sName + ".wast" 
+			self.input_dir = ConfigParsor("TESTCASE", datalist) +self.sName +"/"
+			self.input = self.input_dir + self.sName + ".wast"
+			self.mutator = ConfigParsor("RADAMSA", datalist) 
 
 		if os.path.isdir(self.input_dir) !=True:
 			os.mkdir(self.input_dir)
