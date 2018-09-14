@@ -8,11 +8,11 @@ class Mutator :
 			datalist = f.readlines()
 			self.contract = str((datalist[2].split("="))[1][1:-2])
 			self.seed = str((datalist[2].split("="))[1][1:-2])+"/hello.wast"
-			self.input = "./hello/hello.wast"
+			self.input = str((datalist[4].split("="))[1][1:-2])+"/hello.wast"
 			self.mutator = (datalist[3].split("="))[1][1:-2]
-		if os.path.isdir("./hello") !=True:
-			os.mkdir("./hello")
-		shutil.copyfile(self.contract+"/hello.abi","./hello/hello.abi")
+		if os.path.isdir(self.input) !=True:
+			os.mkdir(self.input)
+		shutil.copyfile(self.contract+"/hello.abi",self.input+"/hello.abi")
 	
 
 	def make_testcase(self):
