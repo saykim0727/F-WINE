@@ -28,8 +28,5 @@ class Monitor:
 			move("%s/%s" % (self._core_dir,filename), "%s/%s" % (self._crash_dir, timer))
 			shutil.copytree("%s" % (self._contract),"%s/%s/testcasse" % (self._crash_dir,timer))
 			return True
-		            # print "[!] CORE & CRASH data is moved"
-			    # else:
-			    # print "[!] Process still alive"
 		return False
 
