@@ -4,13 +4,14 @@ import time
 import os
 import random
 import string
-
+from configParsor import ConfigParsor 
 class Nodeos :	
 	def __init__ (self):
                 with open("/FUZZ/config.ini","r") as f :
                     datalist = f.readlines()
-                    nodeoslist = datalist[1].split("=")
-                    self._NODEOS = nodeoslist[1][1:-2]
+                    self._NODEOS = ConfigParsor("NODEOS",datalist)
+                    #nodeoslist = datalist[1].split("=")
+                    #self._NODEOS = nodeoslist[1][1:-2]
                     #print repr(self._NODEOS)
 
 	def runNodeos(self):
@@ -30,9 +31,14 @@ class Cleos():
 	def __init__(self, wallet_name = "".join([random.choice(string.ascii_lowercase) for _ in range(6)])):
                 with open("/FUZZ/config.ini","r") as f :
                     dataList = f.readlines()
-                    self._cleos = (dataList[0].split("="))[1][1:-2]
-                    self._contract = (dataList[2].split("="))[1][1:-2]
-                    self._testcase = (dataList[4].split("="))[1][1:-2]
+                    self._cleos = ConfigParsor("CLEOS",dataList)
+                    self._sName = ConfigParsor("SEED_NAME",dataList)
+                    self._contract = ConfigParsor("CONTRACT", dataList) + self._sName
+                    self._testcase = ConfigParsor("TESTCASE",dataList) + self._sName
+
+                    #self._cleos = (dataList[0].split("="))[1][1:-2]
+                    #self._contract = (dataList[2].split("="))[1][1:-2]
+                    #self._testcase = (dataList[4].split("="))[1][1:-2]
 		self._walletName = wallet_name
                 #print repr(self._contract)
 
