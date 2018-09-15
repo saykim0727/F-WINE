@@ -20,7 +20,12 @@ class Mutator :
 
 	def make_testcase(self):
 		#cmd is must collected when base fuzzer is changed
-		cmd = "cat %s | %s -o %s" % (self.seed,self.mutator,self.input)
-		testcase_proc = subprocess.Popen(cmd,shell=True)
-		testcase_proc.wait()
-		
+                if(1==1):
+                    cmd = "cat %s | %s -o %s" % (self.seed,self.mutator,self.input)
+                    testcase_proc = subprocess.Popen(cmd,shell=True)
+                    testcase_proc.wait()
+                else:
+                    cmd = "cat %s > %s" % (self.seed,self.input)
+                    testcase_proc = subprocess.Popen(cmd,shell=True)
+                    testcase_proc.wait()
+
