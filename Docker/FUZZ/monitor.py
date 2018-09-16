@@ -7,8 +7,8 @@ class Monitor:
 		self._crash_dir = crash_dir 
 		with open("/FUZZ/config.ini","r") as f:
 			datalist = f.readlines()
-                        self._contract = ConfigParsor("CONTRACT",datalist)
-
+                        self._contract = ConfigParsor("TESTCASE",datalist)
+			
 		if os.path.isdir(core_dir) != True:
 			os.mkdir(core_dir)
 
@@ -28,5 +28,6 @@ class Monitor:
 			move("%s/%s" % (self._core_dir,filename), "%s/%s" % (self._crash_dir, timer))
 			shutil.copytree("%s" % (self._contract),"%s/%s/testcasse" % (self._crash_dir,timer))
 			return True
+		print self._contract, self._crash_dir
 		return False
 

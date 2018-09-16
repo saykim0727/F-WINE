@@ -74,7 +74,7 @@ class Cleos():
 
 	def setContract(self, account_name):
 		cmdline = [self._cleos ,"set","contract",account_name,self._testcase]
-
+		time.sleep(0.1)
 		set_process = subprocess.Popen(cmdline, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 		set_process.wait()
 		#print "[!] SET CONTRACT"
