@@ -27,8 +27,8 @@ class Monitor:
 				timer = tiemr + 0.5
 			os.mkdir("%s/%s" % (self._crash_dir, timer))
 			move("%s/%s" % (self._core_dir,filename), "%s/%s" % (self._crash_dir, timer))
+			move("%s" % ("/var/log/cron.log"), "%s/%s" % (self._crash_dir, timer))
 			shutil.copytree("%s" % (self._testcase + self._seed+"/"),"%s/%s/testcase" % (self._crash_dir,timer))
-			shutil.copytree("%s" % ("/var/log/cron.log"),"%s/%s/testcase" %(self._crash_dir,timer))
 			return True
 		print self._testcase, self._crash_dir
 		return False
