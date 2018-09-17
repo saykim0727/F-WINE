@@ -6,7 +6,7 @@
 
 ### Docker
 ```
-$run_docker.sh
+$run_docker.sh [contianer_name]
 ```
 
 
