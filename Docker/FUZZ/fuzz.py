@@ -47,7 +47,7 @@ class Fuzzer:
 if __name__ == "__main__":
 	mod ="0"
 	fuzzer = Fuzzer()
-	if len(sys.argv)==2 and sys.argv[2] == "--debug":
+	if len(sys.argv)==2 and sys.argv[2] == "debug":
 		mod = "1"
 		print "[!] Debug mod\n"
 		fuzzer.run_node()
