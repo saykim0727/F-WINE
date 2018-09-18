@@ -4,6 +4,5 @@ pkill -9 nodeos
 pkill -9 keosd
 
 rm -rf ~/eosio-wallet/*
-
-/usr/bin/python /FUZZ/fuzz.py 2>/dev/null
+/usr/bin/python /FUZZ/fuzz.py $1 2>/dev/null
 

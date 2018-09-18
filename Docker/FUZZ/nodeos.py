@@ -25,7 +25,7 @@ class Nodeos :
 		self._proc.wait()
 
 class Cleos():
-	def __init__(self, wallet_name = "".join([random.choice(string.ascii_lowercase) for _ in range(6)])):
+	def __init__(self,mod, wallet_name = "".join([random.choice(string.ascii_lowercase) for _ in range(6)])):
 		with open("/FUZZ/config.ini","r") as f :
                     dataList = f.readlines()
                     self._cleos = ConfigParsor("CLEOS",dataList)
@@ -33,6 +33,8 @@ class Cleos():
                     self._contract = ConfigParsor("CONTRACT", dataList) + self._sName
                     self._testcase = ConfigParsor("TESTCASE",dataList) + self._sName
                     self._walletName = wallet_name
+                    if mod=="1":
+                        self._testcase = ConfigParsor("REPLAY",dataList) + self._sName
 
 	def createWallet(self):
 		cmdline = [self._cleos,"wallet","create","-n",self._walletName]

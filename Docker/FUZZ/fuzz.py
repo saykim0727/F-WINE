@@ -2,21 +2,24 @@ from nodeos import *
 from monitor import *
 from mutator  import *
 import os
+import time
 import sys
 
 class Fuzzer:
 	def __init__ (self) :
 		pass
-	
-	def setup(self):
-		classNode = Nodeos()
-		mutator = Mutator()
-		classNode.runNodeos()
-		pid = classNode.getChildPid()
-		print "[!] Nodeos pid : %d " % pid 
-		classCleos = Cleos()
+
+	def run_node(self):
+		self.classNode = Nodeos()
+		self.classNode.runNodeos()
+		self._pid = self.classNode.getChildPid()
+		print "[!] Nodeos pid : %d " % self._pid 
+
+	def setup(self,mod):
+		mutator = Mutator() 
+		classCleos = Cleos(mod)
 		classMonitor = Monitor("/CORE/")
-		pub_key = classCleos.createWallet()
+		pub_key = classCleos.createWallet() 
 		account = classCleos.createAccount(pub_key)
 		i=0
 		while True:
@@ -24,17 +27,35 @@ class Fuzzer:
 			mutator.make_testcase()
 			classCleos.setContract(account)
 			classCleos.pushTransaction(account, "hi","[\"test\"]")
-			result = classMonitor.crashMonitor(pid)
-
+			result = classMonitor.crashMonitor(self._pid) 
 			i = i +1
 			if result == True or i % 20 == 0 :
-				classNode.pskill()
+				self.classNode.pskill()
 				break
 		return 
-            
+
+	def debug(self):
+		classCleos = Cleos(mod)
+		classMonitor = Monitor("/CORE/")
+		pub_key = classCleos.createWallet() 
+		account = classCleos.createAccount(pub_key)
+		classCleos.setContract(account)
+		classCleos.pushTransaction(account, "hi","[\"test\"]")
+		result = classMonitor.crashMonitor(self._pid) 
+ 
 
 if __name__ == "__main__":
+	mod ="0"
+	fuzzer = Fuzzer()
+	if len(sys.argv)==2 and sys.argv[2] == "--debug":
+		mod = "1"
+		print "[!] Debug mod\n"
+		fuzzer.run_node()
+		fuzzer.debug(mod)
+		time.sleep(1000)
+		sys.exit()
+	
 	while 1:
-		fuzzer = Fuzzer()
-		fuzzer.setup()
+		fuzzer.run_node()
+		fuzzer.setup(mod)
 	
