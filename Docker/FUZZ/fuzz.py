@@ -52,7 +52,6 @@ if __name__ == "__main__":
 		print "[!] Debug mod\n"
 		fuzzer.run_node()
 		fuzzer.debug(mod)
-		time.sleep(1000)
 		sys.exit()
 	
 	while 1:
