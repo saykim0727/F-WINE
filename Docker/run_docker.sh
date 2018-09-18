@@ -7,9 +7,13 @@ if [ $1 ]
 then
 	NAME=$1
 fi
-if [ $2 = "debug" ]
+
+if [ $2 ]
 then
+	if [ $2 = "debug" ]
+	then 
 	FLAG="debug"
+	fi
 fi
 sudo docker rm $NAME
 sudo docker kill $NAME
