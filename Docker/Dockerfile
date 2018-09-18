@@ -16,6 +16,8 @@ RUN apt-get install -y gdb
 RUN apt-get install -y strace
 RUN apt-get install -y libssl1.0.0
 RUN apt-get install -y clang
+RUN apt-get install -y openssh-server
+RUN apt-get install -y net-tools
 RUN pip install psutil
 
 RUN apt-get install -y cron
