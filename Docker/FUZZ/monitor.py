@@ -30,6 +30,5 @@ class Monitor:
 			move("%s" % ("/var/log/cron.log"), "%s/%s" % (self._crash_dir, timer))
 			shutil.copytree("%s" % (self._testcase + self._seed+"/"),"%s/%s/testcase" % (self._crash_dir,timer))
 			return True
-		print self._testcase, self._crash_dir
 		return False
 
