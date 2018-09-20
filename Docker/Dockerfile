@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 MAINTAINER efuss <efuzz@gmail.com>
 
 ###### SERVER SETTING ########
@@ -14,7 +14,7 @@ RUN apt-get install -y python-pip
 RUN pip install --upgrade pip
 RUN apt-get install -y gdb
 RUN apt-get install -y strace
-RUN apt-get install -y libssl1.0.0
+#RUN apt-get install -y libssl1.0.0
 RUN apt-get install -y clang
 RUN apt-get install -y openssh-server
 RUN apt-get install -y net-tools
