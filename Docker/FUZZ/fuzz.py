@@ -9,8 +9,8 @@ class Fuzzer:
 	def __init__ (self) :
 		pass
 
-	def run_node(self):
-		self.classNode = Nodeos()
+	def run_node(self,mod):
+		self.classNode = Nodeos(mod)
 		self.classNode.runNodeos()
 		self._pid = self.classNode.getChildPid()
 		print "[!] Nodeos pid : %d " % self._pid 
@@ -50,11 +50,11 @@ if __name__ == "__main__":
 	if len(sys.argv)==2 and sys.argv[1] == "debug":
 		mod = "1"
 		print "[!] Debug mod\n"
-		fuzzer.run_node()
+		fuzzer.run_node(mod)
 		fuzzer.debug(mod)
 		sys.exit()
 	
 	while 1:
-		fuzzer.run_node()
+		fuzzer.run_node(mod)
 		fuzzer.setup(mod)
 	
