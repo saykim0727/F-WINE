@@ -2,6 +2,9 @@ from pwn import process
 import glob
 import sys
 import os
+
+CHAR_LENGTH = 60
+
 if len(sys.argv) < 3 or os.getuid() !=0 :
     print "[!] USAGE : python ./dna.py [ crash dir path ] [gdb or gdb-peda]"
     print "[!] You have to run root priviledge"
@@ -41,7 +44,7 @@ while 1:
 callStack += p.recvuntil(debugger)
 callStackList = callStack.split("#")
 for data in callStackList:
-    strData = (data[0:40]+"...." + data[-40:-1]).split("\n")[0]
+    strData = (data[0:CHAR_LENGTH]+"...." + data[-CHAR_LENGTH:-1]).split("\n")[0]
     print strData
 
 

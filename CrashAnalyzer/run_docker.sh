@@ -2,7 +2,6 @@
 NAME="analysis"
 
 sudo rm -rf ./CRASH
-
 sudo cp -r ../Docker/CRASH ./CRASH
 
 sudo docker rm $NAME
