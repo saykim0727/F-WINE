@@ -4,10 +4,9 @@ pkill -9 nodeos
 pkill -9 keosd
 
 rm -rf ~/eosio-wallet/*
-if [ $1 = "debug" ]
+if [ $1 ]
 then
-	/usr/bin/python /FUZZ/fuzz.py $1
+	/usr/bin/python /FUZZ/fuzz.py debug
 else
-then
 	/usr/bin/python /FUZZ/fuzz.py $1 2>/dev/null
 fi
