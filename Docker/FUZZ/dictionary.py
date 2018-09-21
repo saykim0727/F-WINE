@@ -1,22 +1,38 @@
 from configParsor import ConfigParsor
-from dictParsor import DictParsor
+import random
 class Dictionary :
 	def __init__ (self) :
 		with open("/FUZZ/config.ini","r") as f:
 			datalists = f.readlines()
 			self._dict = ConfigParsor("DICTIONARY",datalists)
-		self.define_dict()
-	
-	def type_section:
-		with open("/FUZZ/syntax.dict","r") as f:
+
+	def numberOfthis(self,start,end) :
+		return 	random.randrange(start,end)
+
+	def typeSection(self):
+		type_list = ""
+		value_list = ""
+		with open(self._dict,"r") as f:
 			datalists = f.readlines()
-			type_list = DictParsor("type_list",datalists)
-			value_list = value_list("value_list",datalists)
-				# will be changed	
+			type_list = self.DictParsor("type_list",datalists)
+			value_list = self.DictParsor("value_list",datalists)
+		#type_section = "(type $FUNCSIG$%s (func %s %s))" % (type_var,param,result)	
+		type_section = []
+		type_section_Number = numberOfthis(4,10)	#number is can changed
 		type_val = "XY"	
 		param = "(param %s)"
 		result = "(result %s)"
-		return type_section_ = "(type $FUNCSIG$%s (func %s %s))" % (type_var,param,result)	
-		
+		return type_section
 
 
+	def 
+
+	def DictParsor(self,Key,List):
+		value = ""
+		for data in List:
+			if Key in data :
+				sData = data.split("=")
+				value = sData[1].rstrip().strip("\"")
+				value = value.split(",")
+				return value;	#return list 
+		return -1;
