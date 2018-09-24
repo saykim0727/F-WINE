@@ -19,5 +19,7 @@ RUN pip install pwntools
 RUN mkdir /CORE/
 ADD ./EOS/ /EOS/
 ADD ./DNA/ /DNA/
+ADD ./SelectionTool/Selection.py ./SelectionTools.py 
+
 RUN ulimit -c unlimited
 CMD echo "/CORE/core.%e.%p.%s" > /proc/sys/kernel/core_pattern 
