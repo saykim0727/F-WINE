@@ -24,6 +24,7 @@ class Fuzzer:
 		i=0
 		while True:
 			time.sleep(0.2)
+                        #mutator.dumFuzz()
 			mutator.make_testcase()
 			classCleos.setContract(account)
 			classCleos.pushTransaction(account, "hi","[\"test\"]")
