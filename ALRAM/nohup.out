@@ -1,0 +1,5 @@
+import: unable to open X server `' @ error/import.c/ImportImageCommand/364.
+from: can't read /var/mail/email.mime.text
+import: unable to open X server `' @ error/import.c/ImportImageCommand/364.
+import: unable to open X server `' @ error/import.c/ImportImageCommand/364.
+./sendmail.py: 9: ./sendmail.py: Syntax error: "(" unexpected
