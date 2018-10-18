@@ -10,7 +10,7 @@ def sendMail(me, you, msg):
     smtp = smtplib.SMTP_SSL('smtp.gmail.com', 465)
     smtp.login(me, 'gdzwzenfuitnlizz')
     msg = MIMEText(msg)
-    msg['Subject'] = 'TEST'
+    msg['Subject'] = 'CRASH DETECTED'
     smtp.sendmail(me, you, msg.as_string())
     smtp.quit()
 
