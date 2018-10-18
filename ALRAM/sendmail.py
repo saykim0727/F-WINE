@@ -25,6 +25,7 @@ def main():
         if(after_count > before_count):
             before_count = after_count
             sendMail('k1rh4.lee@gmail.com', 'k1rh4.lee@gmail.com', "\n".join(fileList))
+            sendMail('saykim0727@naver.com', 'saykim0727@naver.com', "\n".join(fileList))
 
 if __name__ =="__main__":
     main()
