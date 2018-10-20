@@ -8,7 +8,10 @@ import time
 
 def sendMail(me, you, msg):
     smtp = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-    smtp.login(me, 'gdzwzenfuitnlizz')
+	if me=="k1rh4.lee@gmail.com":
+	    smtp.login(me, 'gdzwzenfuitnlizz')
+	else:
+		smtp.login(me,'dqdmcjtvbwyhcfzu')
     msg = MIMEText(msg)
     msg['Subject'] = 'CRASH DETECTED'
     smtp.sendmail(me, you, msg.as_string())
@@ -25,7 +28,7 @@ def main():
         if(after_count > before_count):
             before_count = after_count
             sendMail('k1rh4.lee@gmail.com', 'k1rh4.lee@gmail.com', "\n".join(fileList))
-            sendMail('saykim0727@naver.com', 'saykim0727@naver.com', "\n".join(fileList))
+            sendMail('saykim0727@ajou.ac.kr', 'saykim0727@ajou.ac.kr', "\n".join(fileList))
 
 if __name__ =="__main__":
     main()
