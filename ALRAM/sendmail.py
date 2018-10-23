@@ -8,10 +8,10 @@ import time
 
 def sendMail(me, you, msg):
     smtp = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-	if me=="k1rh4.lee@gmail.com":
-	    smtp.login(me, 'gdzwzenfuitnlizz')
-	else:
-		smtp.login(me,'dqdmcjtvbwyhcfzu')
+    if me=="k1rh4.lee@gmail.com":
+        smtp.login(me, 'gdzwzenfuitnlizz')
+    else:
+        smtp.login(me,'dqdmcjtvbwyhcfzu')
     msg = MIMEText(msg)
     msg['Subject'] = 'CRASH DETECTED'
     smtp.sendmail(me, you, msg.as_string())
