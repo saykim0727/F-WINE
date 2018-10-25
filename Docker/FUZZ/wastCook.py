@@ -8,7 +8,7 @@ class wastCook:
                 data = f.readline().strip("\n");
                 cntOriginLine +=1
                 if(data=="") : break;
-                self.seedLines.append(data)
+                self.seedLines.append(data+"\n")
 
                 if("(export " in data[:9]):
                     pass
@@ -48,7 +48,7 @@ class wastCook:
                                 self.list["target"][callFuncName] = cntOriginLine
                             break
                         data = f.readline().strip("\n");
-                        self.seedLines.append(data)
+                        self.seedLines.append(data+"\n")
                         cntOriginLine +=1
 
                 else : pass
@@ -61,14 +61,14 @@ class wastCook:
             for iterator in self.list["target"].keys():
                 line = self.list["target"].get(iterator)
                 if (line >= lineNumber):
-                    self.list["target"][itorator] +=1
+                    self.list["target"][iterator] +=1
             return 1
         else:
             return 0
 
     def saveFile(self, outFile):
         with open(outFile,"w") as f:
-            f.write(self.seedLines)
+            f.writelines(self.seedLines)
         return 1
 
     def getApiParam(self, funcName):
@@ -77,13 +77,39 @@ class wastCook:
             paramData = lineData.split("(param ")[1].split(")")[0].split(" ")
             return paramData
 
+    def getCallArgu(self, funcName):
+        if funcName in self.list["call"]:
+            lineData = self.list["call"][funcName].strip(" ").strip("(").rstrip(")")
+            import re
+            pat = r'(?<=\().+?(?=\))'
+            valueList = re.findall(pat,lineData)
+            return valueList
+
+    def setCallArgu(self, funcName, _fromArgu, _toArgu):
+        if funcName in self.list["call"]:
+            callData = self.list["call"][funcName]
+            self.list["call"][funcName]  = callData.replace(_fromArgu, _toArgu)
+
+
     def insertData(self, _type, _value):
         pass
 
 if __name__ == "__main__":
     w = wastCook("./hello.wast");
     print w.list["target"].keys()
+    print w.list["target"].values()
     print repr(w.list["import"]["fimport$0"])
     print w.getApiParam("fimport$0")
+    print w.list["call"].keys()
+    print "-----------------------------------"
+    print w.getCallArgu("fimport$0")
+    w.insertFunc("fimport$0")
+
+    w.setCallArgu("fimport$0","i32.const 146","i32.const 2048")
+    print w.getCallArgu("fimport$0")
+    w.saveFile("./hello.wast2");
+
+
+
 
 
