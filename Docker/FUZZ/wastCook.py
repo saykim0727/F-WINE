@@ -1,6 +1,6 @@
 class wastCook:
     def __init__ (self,seed):
-        self.list = {"import":{}, "data":{},"global":{},"function":{},"call":{},"target":{}}
+        self.list = {"import":{}, "data":"","global":{},"function":{},"call":{},"target":{}}
         self.seedLines = []
         cntOriginLine = -1;
         with open(seed,"r") as f :
@@ -21,6 +21,7 @@ class wastCook:
                     self.list["import"][funcName]=data
 
                 elif("(data " in data[:6]):
+                    #remove
                     valueName = data.split("(data (")[1].split(")")[0]
                     self.list["data"][valueName]=data
 
@@ -39,7 +40,7 @@ class wastCook:
 
                 elif("(call " in data):
                     callString = ""
-                    callFuncName = data.split("(call $")[1].split(" ")[0]
+                    callFuncName = data.split("(call $")[1].split(" ")[0].split(")")[0]
                     while True:
                         callString += data
                         self.list["call"][callFuncName]=callString
@@ -53,11 +54,11 @@ class wastCook:
 
                 else : pass
 
-    def insertFunc(self, funcName):
+    def insertFunc(self, funcName, line):
         if funcName in self.list["target"].keys():
             lineNumber = self.list["target"][funcName]
-            self.seedLines.insert(lineNumber,self.list["call"][funcName])
-            # count up target line because of insert line 
+            self.seedLines.insert(line-1,self.list["call"][funcName])
+            # count up target line because of insert line
             for iterator in self.list["target"].keys():
                 line = self.list["target"].get(iterator)
                 if (line >= lineNumber):
@@ -78,11 +79,21 @@ class wastCook:
             return paramData
 
     def getCallArgu(self, funcName):
+        valueList=[]
         if funcName in self.list["call"]:
-            lineData = self.list["call"][funcName].strip(" ").strip("(").rstrip(")")
-            import re
-            pat = r'(?<=\().+?(?=\))'
-            valueList = re.findall(pat,lineData)
+            vData = self.list["call"][funcName].strip(" ").strip("(").rstrip(")")
+            dataType =["get_local ","i32.const ","tee_local ","i64.const "]
+            for _type in dataType:
+                tmpData = vData
+                while True:
+                    if(tmpData.find(_type)>=0):
+                        typeData = tmpData[tmpData.find(_type)::]
+                        typeData = typeData[0:typeData.find(")")]
+                        tmpData = tmpData[tmpData.find(_type)+len(_type)::]
+                        valueList.append(typeData)
+                    else:
+                        break
+
             return valueList
 
     def setCallArgu(self, funcName, _fromArgu, _toArgu):
@@ -91,25 +102,5 @@ class wastCook:
             self.list["call"][funcName]  = callData.replace(_fromArgu, _toArgu)
 
 
-    def insertData(self, _type, _value):
-        pass
-
-if __name__ == "__main__":
-    w = wastCook("./hello.wast");
-    print w.list["target"].keys()
-    print w.list["target"].values()
-    print repr(w.list["import"]["fimport$0"])
-    print w.getApiParam("fimport$0")
-    print w.list["call"].keys()
-    print "-----------------------------------"
-    print w.getCallArgu("fimport$0")
-    w.insertFunc("fimport$0")
-
-    w.setCallArgu("fimport$0","i32.const 146","i32.const 2048")
-    print w.getCallArgu("fimport$0")
-    w.saveFile("./hello.wast2");
-
-
-
-
-
+    def insertData(self, _value):
+        self.seedLines.insert(1,' (data (i32.const 1000000) \"%s\")\n' % _value)
