@@ -54,6 +54,8 @@ class wastCook:
 
                 else : pass
 
+
+
     def insertFunc(self, funcName, line):
         if funcName in self.list["target"].keys():
             lineNumber = self.list["target"][funcName]
@@ -77,6 +79,26 @@ class wastCook:
             lineData = self.list["import"][funcName]
             paramData = lineData.split("(param ")[1].split(")")[0].split(" ")
             return paramData
+
+    def replaceApiArgs(self, funcName, customValue):
+        #customValue is get_local $0
+        valueList  =[]
+        stack = []
+        if funcName in self.list["call"]:
+            vData = self.list["call"][funcName]
+        for cnt in range(len(vData)):
+            if vData[cnt] == "(":
+                stack.append(cnt)
+            elif vData[cnt] == ")":
+                valueList.append( vData[stack.pop()+1:cnt].strip() )
+            else:
+                pass
+
+        for value in valueList:
+            if (value.find("get_local")>=0):
+                strValue = self.list["call"][funcName].replace(value, customValue)
+                self.list["call"][funcName] = strValue
+        return self.list["call"][funcName]
 
     def getCallArgu(self, funcName):
         valueList=[]

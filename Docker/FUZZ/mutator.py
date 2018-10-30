@@ -12,30 +12,30 @@ class Mutator :
             self.sName = ConfigParsor("SEED_NAME",datalist)
             self.seed_dir = ConfigParsor("CONTRACT", datalist) + self.sName +"/"
             self.seed = self.seed_dir + self.sName + ".wast"
-            self.input_dir = ConfigParsor("TESTCASE", datalist) +self.sName +"/"
-            self.input = self.input_dir + self.sName + ".wast"
+            self.testcase_dir = ConfigParsor("TESTCASE", datalist) +self.sName +"/"
+            self.testcase = self.testcase_dir + self.sName + ".wast"
             self.mutator = ConfigParsor("RADAMSA", datalist)
 
-        if os.path.isdir(self.input_dir) !=True:
-            os.mkdir(self.input_dir)
-        shutil.copyfile(self.seed_dir+self.sName+".abi",self.input_dir+self.sName+".abi")
+        if os.path.isdir(self.testcase_dir) !=True:
+            os.mkdir(self.testcase_dir)
+        shutil.copyfile(self.seed_dir+self.sName+".abi",self.testcase_dir+self.sName+".abi")
 
     def make_testcase(self):
-        #cmd is must collected when base fuzzer is changed
-        cmd = "cat %s | %s -o %s" % (self.seed,self.mutator,self.input)
         self.testMutator()
-        testcase_proc = subprocess.Popen(cmd,shell=True)
-        testcase_proc.wait()
+        #cmd is must collected when base fuzzer is changed
+        #cmd = "cat %s | %s -o %s" % (self.testcase,self.mutator,self.testcase)
+        #testcase_proc = subprocess.Popen(cmd,shell=True)
+        #testcase_proc.wait()
 
     def testMutator(self):
         w = wastCook(self.seed)
-        a = w.list["call"].values()
+        a = w.list["call"].keys()
         random.shuffle(a)
         for callData in a:
             if random.randint(0,5)%5 == 0 :
-                w.insertFunc(callData,590);
+                w.insertFunc(callData,589);
             else : pass
-        w.saveFile(self.seed)
+        w.saveFile(self.testcase)
 
 
     def stringMutation(self):
@@ -54,7 +54,7 @@ class Mutator :
         ## Recommand: seed is suppose to be wsam,
         ## Because Wast -> wasm error is not useful.
         def dumFuzz(self):
-                inputFile = open(self.input,"w")
+                testcaseFile = open(self.testcase,"w")
                 with open(self.seed,"r") as f:
                     seedData = f.read()
                     seedSize = len(seedData)
@@ -62,6 +62,6 @@ class Mutator :
                         randomNumber = random.randrange(0,(seedSize))
                         x = random.randint(0,0xffffffff)
                         seedData = seedData[0:randomNumber] + struct.pack("<L",x) + seedData[randomNumber+4::]
-                    inputFile.write(seedData)
-                inputFile.close()
+                    testcaseFile.write(seedData)
+                testcaseFile.close()
         '''

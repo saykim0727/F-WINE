@@ -1,11 +1,11 @@
 import subprocess
 import psutil
-import time 
+import time
 import os
 import random
 import string
-from configParsor import ConfigParsor 
-class Nodeos :	
+from configParsor import ConfigParsor
+class Nodeos :
 	def __init__ (self,mod):
 		with open("/FUZZ/config.ini","r") as f :
 			datalist = f.readlines()
@@ -17,9 +17,9 @@ class Nodeos :
 		cmdline = [self._NODEOS , "-e", "-p" , "eosio","--plugin" ,"eosio::chain_api_plugin" , "--plugin" ,"eosio::history_api_plugin" ,"--contracts-console","--delete-all-blocks","--hard-replay-blockchain" ]
 		if self._mod == "1":
 			self._proc = subprocess.Popen(cmdline)
-		else : 
+		else :
 			self._proc = subprocess.Popen(cmdline,stdout=subprocess.PIPE,stderr=subprocess.PIPE) #need stdout, stderr redirection
-		time.sleep(3) 
+		time.sleep(6)
 
 	def getChildPid(self):
 		pid = self._proc.pid
@@ -46,9 +46,9 @@ class Cleos():
 		wallet_process = subprocess.Popen(cmdline, stdout=subprocess.PIPE)
 		for i in range(0,4):
 			stdout = wallet_process.stdout.readline()
-		
+
 		wallet_pw   = (str(stdout[1:-2]))
-		
+
 		wallet_process.wait()
 		#print "[!] CREATE WALLET"
 		eosio_key = "5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"
@@ -59,7 +59,7 @@ class Cleos():
 		pub_key = str(key_process.stdout.readline()[12:-1])
 		key_process.wait()
 		#print "[!] CREATE KEY"
-		
+
 		#self.lock_check(priv_key,wallet_pw)
 		cmdline = [self._cleos,"wallet","import","-n",self._walletName,"--private-key",priv_key]
 		import_process = subprocess.Popen(cmdline)
