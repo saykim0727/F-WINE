@@ -21,7 +21,6 @@ class Mutator :
         shutil.copyfile(self.seed_dir+self.sName+".abi",self.testcase_dir+self.sName+".abi")
 
     def make_testcase(self):
-        self.testMutator()
         #cmd is must collected when base fuzzer is changed
         cmd = "cat %s | %s -o %s" % (self.testcase,self.mutator,self.testcase)
         testcase_proc = subprocess.Popen(cmd,shell=True)
@@ -52,7 +51,7 @@ class Mutator :
                 w.insertFunc(funcName,589)
             else : pass
         w.saveFile(self.testcase)
-        import time
+		self.make_testcase()
 
 
     def stringMutation(self):

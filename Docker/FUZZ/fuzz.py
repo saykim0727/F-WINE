@@ -25,7 +25,7 @@ class Fuzzer:
 		while True:
 			time.sleep(0.2)
                         #mutator.dumFuzz()
-			mutator.make_testcase()  #Make return value for pushTranaction
+			mutator.testMutator()  #Make return value for pushTranaction
 			classCleos.setContract(account)
 			classCleos.pushTransaction(account, "hi","[\"test\"]")
 			result = classMonitor.crashMonitor(self._pid)
