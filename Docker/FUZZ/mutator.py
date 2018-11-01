@@ -45,13 +45,13 @@ class Mutator :
                         continue
                     constValue = "%s.const" % (paramType)
                     replaceValue = arguList[index].replace("get_local",constValue)
-		    replaceValue = w.setCallValue(funcName,paramType,replaceValue)
+                    replaceValue = w.setCallValue(funcName,paramType,replaceValue)
                     w.setCallArgu(funcName,arguList[index],replaceValue)
                     index +=1
                 w.insertFunc(funcName,589)
             else : pass
         w.saveFile(self.testcase)
-		self.make_testcase()
+        self.make_testcase()
 
 
     def stringMutation(self):
