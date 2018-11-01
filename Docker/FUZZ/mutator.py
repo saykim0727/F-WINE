@@ -22,11 +22,11 @@ class Mutator :
 
     def make_testcase(self):
         pass
-#        self.testMutator()
+        self.testMutator()
         #cmd is must collected when base fuzzer is changed
- #       cmd = "cat %s | %s -o %s" % (self.testcase,self.mutator,self.testcase)
-  #      testcase_proc = subprocess.Popen(cmd,shell=True)
-   #     testcase_proc.wait()
+        cmd = "cat %s | %s -o %s" % (self.testcase,self.mutator,self.testcase)
+        testcase_proc = subprocess.Popen(cmd,shell=True)
+        testcase_proc.wait()
 
     def testMutator(self):
         w = wastCook(self.seed)
