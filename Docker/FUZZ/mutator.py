@@ -21,19 +21,21 @@ class Mutator :
         shutil.copyfile(self.seed_dir+self.sName+".abi",self.testcase_dir+self.sName+".abi")
 
     def make_testcase(self):
-        self.testMutator()
+		pass
+#        self.testMutator()
         #cmd is must collected when base fuzzer is changed
-        cmd = "cat %s | %s -o %s" % (self.testcase,self.mutator,self.testcase)
-        testcase_proc = subprocess.Popen(cmd,shell=True)
-        testcase_proc.wait()
+#        cmd = "cat %s | %s -o %s" % (self.testcase,self.mutator,self.testcase)
+#        testcase_proc = subprocess.Popen(cmd,shell=True)
+#        testcase_proc.wait()
 
     def testMutator(self):
         w = wastCook(self.seed)
+
         a = w.list["call"].keys()
         random.shuffle(a)
-        for callData in a:
+        for funcName in a:
             if random.randint(0,5)%5 == 0 :
-                w.insertFunc(callData,589);
+                w.insertFunc(funcName,589);
             else : pass
         w.saveFile(self.testcase)
 
@@ -42,11 +44,15 @@ class Mutator :
         x = "a" * 10000
         return x
 
-    def intMutation(self):
-        x = [-2147483648,2147483647,-9223372036854775808,9223372036854775807]
-        return x[random.randint(0,4)]
+    def intMutation(self,_type):
+        x = []
+        if _type == "i32":
+            x = [-2147483648,2147483647]
+        else == "i64":
+            x= [-9223372036854775808,9223372036854775807]
+        return x[random.randint(0,2)]
 
-    def floatMutation(self):
+    def i32floatMutation(self):
         x = [340282346638528859811704183484516925440.000000, -340282346638528859811704183484516925439.000000]
         return x[random.randint(0,2)]
 
