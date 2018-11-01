@@ -77,6 +77,8 @@ class wastCook:
     def getApiParam(self, funcName):
         if funcName in self.list["import"]:
             lineData = self.list["import"][funcName]
+			if "param" not in lineData:
+				return None
             paramData = lineData.split("(param ")[1].split(")")[0].split(" ")
             return paramData
 
@@ -124,5 +126,8 @@ class wastCook:
             self.list["call"][funcName]  = callData.replace(_fromArgu, _toArgu)
 
 
-    def insertData(self, _value):
-        self.seedLines.insert(1,' (data (i32.const 1000000) \"%s\")\n' % _value)
+    def insertData(self, _value1, _value2, _value3, _value4):
+        self.seedLines.insert(1,' (data (i32.const 1000000) \"%s\")\n' % _value1)
+		self.seedLines.insert(1,' (data (i64.const 5000000) \"%s\")\n' % _value2)
+		self.seedLines.insert(1,' (data (f32.const 10000000) \"%s\")\n' % _value3)
+		#self.seedLines.insert(1,' (data (f64.const 15000000) \"%s\")\n' % _value4)
