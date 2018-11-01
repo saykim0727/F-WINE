@@ -54,8 +54,6 @@ class Mutator :
             else : pass
         w.saveFile(self.testcase)
         import time
-        print "a"
-        time.sleep(2)
 
 
     def stringMutation(self):

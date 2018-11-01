@@ -140,7 +140,6 @@ class wastCook:
                 index = tempList.index(check) 
                 tempList.pop(index)
                 cValue = tempList.pop(index)
-                print cValue, data
                 value = value.replace(cValue,data)
             else:
                 break;
