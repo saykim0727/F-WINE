@@ -21,7 +21,6 @@ class Mutator :
         shutil.copyfile(self.seed_dir+self.sName+".abi",self.testcase_dir+self.sName+".abi")
 
     def make_testcase(self):
-        pass
         self.testMutator()
         #cmd is must collected when base fuzzer is changed
         cmd = "cat %s | %s -o %s" % (self.testcase,self.mutator,self.testcase)
