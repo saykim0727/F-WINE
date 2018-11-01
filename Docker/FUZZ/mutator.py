@@ -21,38 +21,51 @@ class Mutator :
         shutil.copyfile(self.seed_dir+self.sName+".abi",self.testcase_dir+self.sName+".abi")
 
     def make_testcase(self):
-		pass
+        pass
 #        self.testMutator()
         #cmd is must collected when base fuzzer is changed
-#        cmd = "cat %s | %s -o %s" % (self.testcase,self.mutator,self.testcase)
-#        testcase_proc = subprocess.Popen(cmd,shell=True)
-#        testcase_proc.wait()
+ #       cmd = "cat %s | %s -o %s" % (self.testcase,self.mutator,self.testcase)
+  #      testcase_proc = subprocess.Popen(cmd,shell=True)
+   #     testcase_proc.wait()
 
     def testMutator(self):
         w = wastCook(self.seed)
-
+        string = self.stringMutation
+        w.insertData(string)
         a = w.list["call"].keys()
         random.shuffle(a)
-        for funcName in a:
+        for funcName in a: 
             if random.randint(0,5)%5 == 0 :
-                w.insertFunc(funcName,589);
+                index = 0
+                typeList =  w.getApiParam(funcName)   #typeList[0] = i32
+                if typeList == None:
+                    w.insertFunc(funcName,589)
+                    continue
+                arguList =  w.getCallArgu(funcName)   #arguList[0] = (i32.load (get_local $1) (i32.const 123))      
+                for paramType in typeList:
+                    if paramType != "i32":
+                        continue
+                    constValue = "%s.const" % (paramType)
+                    replaceValue = arguList[index].replace("get_local",constValue)
+		    replaceValue = w.setCallValue(funcName,paramType,replaceValue)
+                    w.setCallArgu(funcName,arguList[index],replaceValue)
+                    index +=1
+                w.insertFunc(funcName,589)
             else : pass
         w.saveFile(self.testcase)
+        import time
+        print "a"
+        time.sleep(2)
 
 
     def stringMutation(self):
-        x = "a" * 10000
-        return x
+        return  "a" * 10000
 
-    def intMutation(self,_type):
-        x = []
-        if _type == "i32":
-            x = [-2147483648,2147483647]
-        else == "i64":
-            x= [-9223372036854775808,9223372036854775807]
-        return x[random.randint(0,2)]
+    def intMutation(self):
+        x = [-2147483648,2147483647,-9223372036854775808,9223372036854775807]
+        return x[random.randint(0,4)]
 
-    def i32floatMutation(self):
+    def floatMutation(self):
         x = [340282346638528859811704183484516925440.000000, -340282346638528859811704183484516925439.000000]
         return x[random.randint(0,2)]
 

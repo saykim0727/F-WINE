@@ -77,8 +77,8 @@ class wastCook:
     def getApiParam(self, funcName):
         if funcName in self.list["import"]:
             lineData = self.list["import"][funcName]
-			if "param" not in lineData:
-				return None
+            if "param" not in lineData:
+                return None
             paramData = lineData.split("(param ")[1].split(")")[0].split(" ")
             return paramData
 
@@ -110,15 +110,41 @@ class wastCook:
             for _type in dataType:
                 tmpData = vData
                 while True:
-                    if(tmpData.find(_type)>=0):
-                        typeData = tmpData[tmpData.find(_type)::]
-                        typeData = typeData[0:typeData.find(")")]
-                        tmpData = tmpData[tmpData.find(_type)+len(_type)::]
-                        valueList.append(typeData)
+                    result = ""
+                    postfixTemp = tmpData
+                    if tmpData.find("(")>=0:
+                        lineTemp = postfixTemp[postfixTemp.find("(")::]
+                        postfixTemp = lineTemp
+                        while True:
+                            result = result + postfixTemp[0:postfixTemp.find(")")+1]
+                            postfixTemp = lineTemp[len(result)::] 
+                            if result.count("(") == result.count(")"):
+                                valueList.append(result)
+                                break
+                            else:
+                                continue
+                        tmpData = tmpData[len(result)+len(_type)::]
                     else:
                         break
 
             return valueList
+
+    def setCallValue(self, funcName, _type,value):
+        linetype = {"i32":"1000000)","i64":"5000000)","f32":"10000000)","f64":"15000000)"}
+        data = linetype[_type]
+        check = "(%s.const" % (_type)
+        tempValue = value
+        tempList = tempValue.split(" ")
+        while True:
+            if check in tempList:
+                index = tempList.index(check) 
+                tempList.pop(index)
+                cValue = tempList.pop(index)
+                print cValue, data
+                value = value.replace(cValue,data)
+            else:
+                break;
+        return value
 
     def setCallArgu(self, funcName, _fromArgu, _toArgu):
         if funcName in self.list["call"]:
@@ -126,8 +152,5 @@ class wastCook:
             self.list["call"][funcName]  = callData.replace(_fromArgu, _toArgu)
 
 
-    def insertData(self, _value1, _value2, _value3, _value4):
-        self.seedLines.insert(1,' (data (i32.const 1000000) \"%s\")\n' % _value1)
-		self.seedLines.insert(1,' (data (i64.const 5000000) \"%s\")\n' % _value2)
-		self.seedLines.insert(1,' (data (f32.const 10000000) \"%s\")\n' % _value3)
-		#self.seedLines.insert(1,' (data (f64.const 15000000) \"%s\")\n' % _value4)
+    def insertData(self, _value1):
+        self.seedLines.insert(1,' (data (i32.const 1000000) \"%s\")\n' %('a'*10000))
