@@ -48,7 +48,7 @@ class Mutator :
                     replaceValue = w.setCallValue(funcName,paramType,replaceValue)
                     w.setCallArgu(funcName,arguList[index],replaceValue)
                     index +=1
-                w.insertFunc(funcName,589)
+                w.insertFunc(funcName,590)
             else : pass
         w.saveFile(self.testcase)
        # self.make_testcase()
