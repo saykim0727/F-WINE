@@ -37,7 +37,7 @@ class Mutator :
                 index = 0
                 typeList =  w.getApiParam(funcName)   #typeList[0] = i32
                 if typeList == None:
-                    w.insertFunc(funcName,589)
+                    w.insertFunc(funcName,590)
                     continue
                 arguList =  w.getCallArgu(funcName)   #arguList[0] = (i32.load (get_local $1) (i32.const 123))      
                 for paramType in typeList:
@@ -51,7 +51,7 @@ class Mutator :
                 w.insertFunc(funcName,589)
             else : pass
         w.saveFile(self.testcase)
-        self.make_testcase()
+       # self.make_testcase()
 
 
     def stringMutation(self):
