@@ -153,3 +153,26 @@ class wastCook:
 
     def insertData(self, _value1):
         self.seedLines.insert(1,' (data (i32.const 1000000) \"%s\")\n' %('a'*10000))
+
+def iteratorWast(wastClass,KeyData):
+    print "\n==========================================================="
+    print "[I] list[%s] : %s " %(wastClass, str(type(wastClass.list[KeyData])))
+    print "============================================================"
+    for i in range(0,len(wastClass.list[KeyData])):
+        print "::: [I] Key Data : " + str(KeyData)
+        for data in wastClass.list[KeyData].items():
+            print "     >> " + repr(data)
+
+
+def tester():
+    wastClass = wastCook("./hello/hello.wast");
+
+    iteratorWast(wastClass,"target")
+    iteratorWast(wastClass,"function")
+    iteratorWast(wastClass,"call")
+    iteratorWast(wastClass,"data")
+    iteratorWast(wastClass,"global")
+    iteratorWast(wastClass,"import")
+
+
+#tester()
