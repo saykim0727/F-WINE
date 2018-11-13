@@ -3,6 +3,7 @@ class wastCook:
         self.list = {"import":{}, "data":"","global":{},"function":{},"call":{},"target":{}}
         self.seedLines = []
         cntOriginLine = -1;
+        self.testcase = {}
         with open(seed,"r") as f :
             while True:
                 data = f.readline().strip("\n");
@@ -51,10 +52,34 @@ class wastCook:
                         data = f.readline().strip("\n");
                         self.seedLines.append(data+"\n")
                         cntOriginLine +=1
-
                 else : pass
 
 
+
+    def insertTestcase(self, funcName, line):
+        if funcName in self.list["target"].keys():
+            lineNumber = self.list["target"][funcName]
+            if funcName not in self.testcase:
+                self.testcase[funcName] = "(call $%s\n)\n" % (funcName)
+            self.seedLines.insert(line-1,self.testcase[funcName]+"\n")
+            # count up target line because of insert line
+            for iterator in self.list["target"].keys():
+                line = self.list["target"].get(iterator)
+                if (line >= lineNumber):
+                    self.list["target"][iterator] +=1
+            return 1
+        else:
+            return 0
+
+    def setApiParam(self,funcName,param):
+        result = ""
+        if funcName not in self.testcase:
+            result = "(call $%s)" % (funcName)
+        else :
+            result = self.testcase[funcName]
+        result = result[:-1] + "(%s)" %(param) + result[-1]
+        self.testcase[funcName] = result
+        return result
 
     def insertFunc(self, funcName, line):
         if funcName in self.list["target"].keys():
@@ -117,7 +142,7 @@ class wastCook:
                         postfixTemp = lineTemp
                         while True:
                             result = result + postfixTemp[0:postfixTemp.find(")")+1]
-                            postfixTemp = lineTemp[len(result)::] 
+                            postfixTemp = lineTemp[len(result)::]
                             if result.count("(") == result.count(")"):
                                 valueList.append(result)
                                 break
@@ -137,7 +162,7 @@ class wastCook:
         tempList = tempValue.split(" ")
         while True:
             if check in tempList:
-                index = tempList.index(check) 
+                index = tempList.index(check)
                 tempList.pop(index)
                 cValue = tempList.pop(index)
                 value = value.replace(cValue,data)
@@ -152,7 +177,7 @@ class wastCook:
 
 
     def insertData(self, _value1):
-        self.seedLines.insert(1,' (data (i32.const 1000000) \"%s\")\n' %('a'*10000))
+        self.seedLines.insert(1,' (data (i32.const 1000000) \"%s\\00\")\n' %('a'*10000))
 
 def iteratorWast(wastClass,KeyData):
     print "\n==========================================================="
@@ -174,5 +199,20 @@ def tester():
     iteratorWast(wastClass,"global")
     iteratorWast(wastClass,"import")
 
+def main():
+    w = wastCook("./hello/hello.wast");
+    a = w.list["call"].keys()
+    w.insertData("aaa")
+    for funcName in ["printn"]:
+        typeList = w.getApiParam(funcName)
+        if typeList == None:
+            w.insertTestcase(funcName,590)
+            continue
+        for paramType in typeList:
+            linetype = {"i32":"1000000","i64":"5000000","f32":"10000000","f64":"15000000"}
+            w.setApiParam(funcName,"%s.const %s" % (paramType,linetype[paramType]))
+        w.insertTestcase(funcName,590)
+    w.saveFile("test.wast")
 
+main()
 #tester()
