@@ -17,15 +17,16 @@ class Fuzzer:
 
 	def setup(self,mod):
 		mutator = Mutator()
-		classCleos = Cleos(mod)
 		classMonitor = Monitor("/CORE/")
-		pub_key = classCleos.createWallet()
-		account = classCleos.createAccount(pub_key)
 		i=0
 		while True:
-			time.sleep(0.2)
+			#time.sleep(0.2)
                         #mutator.dumFuzz()
-			mutator.testMutator()  #Make return value for pushTranaction
+			#mutator.testMutator()  #Make return value for pushTranaction
+                        randomName = ''.join(random.choice(string.ascii_lowercase) for _ in range(6))
+		        classCleos = Cleos(mod, wallet_name=randomName)
+		        pub_key = classCleos.createWallet()
+		        account = classCleos.createAccount(pub_key)
 			classCleos.setContract(account)
 			classCleos.pushTransaction(account, "hi","[\"test\"]")
 			result = classMonitor.crashMonitor(self._pid)
@@ -33,6 +34,9 @@ class Fuzzer:
 			if result == True or i % 1000 == 0 :
 				self.classNode.pskill()
 				break
+                        del classCleos
+
+
 		return
 
 	def debug(self,mod):
