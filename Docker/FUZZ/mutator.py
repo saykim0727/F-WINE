@@ -20,26 +20,33 @@ class Mutator :
             os.mkdir(self.testcase_dir)
         shutil.copyfile(self.seed_dir+self.sName+".abi",self.testcase_dir+self.sName+".abi")
 
+    def dataMutator(self,w):
+        for line in w.dict["data"].keys()
+            fromStr = w.dict["data"][line]
+            for i in range(0,len(fromStr)-3):
+                fromStr[i] = chr(random.randrange(0x1,0xff))
+            w.replaceData(line,fromStr)
+
     def make_testcase(self):
         #cmd is must collected when base fuzzer is changed
         cmd = "cat %s | %s -o %s" % (self.testcase,self.mutator,self.testcase)
         testcase_proc = subprocess.Popen(cmd,shell=True)
         testcase_proc.wait()
 
-    def testMutator(self):
+    def testMutator(self): #insertfunction, replace get_local index,
         w = wastCook(self.seed)
         string = self.stringMutation
         w.insertData(string)
-        a = w.list["call"].keys()
+        a = w.dict["call"].keys()
         random.shuffle(a)
-        for funcName in a: 
+        for funcName in a:
             if random.randint(0,5)%5 == 0 :
                 index = 0
-                typeList =  w.getApiParam(funcName)   #typeList[0] = i32
+                typeList =  w.getApiParam(funcName)   #typeList = [i32,i32,i32,...]
                 if typeList == None:
                     w.insertFunc(funcName,590)
                     continue
-                arguList =  w.getCallArgu(funcName)   #arguList[0] = (i32.load (get_local $1) (i32.const 123))      
+                arguList =  w.getCallArgu(funcName)   #arguList[0] = (i32.load (get_local $1) (i32.const 123))
                 for paramType in typeList:
                     if paramType != "i32":
                         continue
@@ -53,6 +60,10 @@ class Mutator :
         w.saveFile(self.testcase)
         self.make_testcase()
 
+    def testMutator2(self): #only replace data
+        w = wastCook(self.seed)
+        dataMutator(w);
+        w.saveFile(self.testcase)
 
     def stringMutation(self):
         return  "a" * 10000
@@ -65,18 +76,15 @@ class Mutator :
         x = [340282346638528859811704183484516925440.000000, -340282346638528859811704183484516925439.000000]
         return x[random.randint(0,2)]
 
-        '''
-        ## Recommand: seed is suppose to be wsam,
-        ## Because Wast -> wasm error is not useful.
-        def dumFuzz(self):
-                testcaseFile = open(self.testcase,"w")
-                with open(self.seed,"r") as f:
-                    seedData = f.read()
-                    seedSize = len(seedData)
-                    for i in range(0,1):
-                        randomNumber = random.randrange(0,(seedSize))
-                        x = random.randint(0,0xffffffff)
-                        seedData = seedData[0:randomNumber] + struct.pack("<L",x) + seedData[randomNumber+4::]
-                    testcaseFile.write(seedData)
-                testcaseFile.close()
-        '''
+
+    def dumFuzz(self):
+        testcaseFile = open(self.testcase,"w")
+        with open(self.seed,"r") as f:
+            seedData = f.read()
+            seedSize = len(seedData)
+            for i in range(0,1):
+                randomNumber = random.randrange(0,(seedSize))
+                x = random.randint(0,0xffffffff)
+                seedData = seedData[0:randomNumber] + struct.pack("<L",x) + seedData[randomNumber+4::]
+            testcaseFile.write(seedData)
+        testcaseFile.close()

@@ -1,6 +1,6 @@
 class wastCook:
     def __init__ (self,seed):
-        self.list = {"import":{}, "data":"","global":{},"function":{},"call":{},"target":{}}
+        self.dict = {"import":{}, "data":{},"global":{},"function":{},"call":{},"target":{}}
         self.seedLines = []
         cntOriginLine = -1;
         self.testcase = {}
@@ -19,17 +19,17 @@ class wastCook:
 
                 elif("(import " in data[:9]) and ("(func $" in data ) :
                     funcName = data.split("(func $")[1].split(" ")[0]
-                    self.list["import"][funcName]=data
+                    self.dict["import"][funcName]=data
 
-                elif("(data " in data[:6]):
+                elif("(data " in data[:7]):
                     #remove
-                    valueName = data.split("(data (")[1].split(")")[0]
-                    self.list["data"][valueName]=data
+                    _data = data.split("\"")[1].split("\")")[0]
+                    self.dict["data"][cntOriginLine]=_data
 
                 elif("(global " in data[:9]):
                     # Not implement Yet
                     #globalName = data.split("$")[1].split(" ")[0]
-                    #self.list["global"][globalName]=data
+                    #self.dict["global"][globalName]=data
                     pass
 
                 elif("(export "in data[:9]):
@@ -37,36 +37,37 @@ class wastCook:
 
                 elif("(func " in data):
                     funcName = data.split("$")[1].split(" ")[0]
-                    self.list["function"][funcName]=data
+                    self.dict["function"][funcName]=data
 
                 elif("(call " in data):
                     callString = ""
                     callFuncName = data.split("(call $")[1].split(" ")[0].split(")")[0]
                     while True:
                         callString += data
-                        self.list["call"][callFuncName]=callString
+                        self.dict["call"][callFuncName]=callString
                         if callString.count("(") == callString.count(")"):
-                            if (callFuncName in self.list["import"]) :
-                                self.list["target"][callFuncName] = cntOriginLine
+                            if (callFuncName in self.dict["import"]) :
+                                self.dict["target"][callFuncName] = cntOriginLine
                             break
                         data = f.readline().strip("\n");
                         self.seedLines.append(data+"\n")
                         cntOriginLine +=1
                 else : pass
 
-
+    def replaceData(self, _line, mutatedString):  #(data (i32.const "aaaaa\00"))
+        self.seedLines[_line].replace(self.dict[_line],mutatedString)
 
     def insertTestcase(self, funcName, line):
-        if funcName in self.list["target"].keys():
-            lineNumber = self.list["target"][funcName]
+        if funcName in self.dict["target"].keys():
+            lineNumber = self.dict["target"][funcName]
             if funcName not in self.testcase:
                 self.testcase[funcName] = "(call $%s\n)\n" % (funcName)
             self.seedLines.insert(line-1,self.testcase[funcName]+"\n")
             # count up target line because of insert line
-            for iterator in self.list["target"].keys():
-                line = self.list["target"].get(iterator)
+            for iterator in self.dict["target"].keys():
+                line = self.dict["target"].get(iterator)
                 if (line >= lineNumber):
-                    self.list["target"][iterator] +=1
+                    self.dict["target"][iterator] +=1
             return 1
         else:
             return 0
@@ -82,14 +83,14 @@ class wastCook:
         return result
 
     def insertFunc(self, funcName, line):
-        if funcName in self.list["target"].keys():
-            lineNumber = self.list["target"][funcName]
-            self.seedLines.insert(line-1,self.list["call"][funcName])
+        if funcName in self.dict["target"].keys():
+            lineNumber = self.dict["target"][funcName]
+            self.seedLines.insert(line-1,self.dict["call"][funcName])
             # count up target line because of insert line
-            for iterator in self.list["target"].keys():
-                line = self.list["target"].get(iterator)
+            for iterator in self.dict["target"].keys():
+                line = self.dict["target"].get(iterator)
                 if (line >= lineNumber):
-                    self.list["target"][iterator] +=1
+                    self.dict["target"][iterator] +=1
             return 1
         else:
             return 0
@@ -100,8 +101,8 @@ class wastCook:
         return 1
 
     def getApiParam(self, funcName):
-        if funcName in self.list["import"]:
-            lineData = self.list["import"][funcName]
+        if funcName in self.dict["import"]:
+            lineData = self.dict["import"][funcName]
             if "param" not in lineData:
                 return None
             paramData = lineData.split("(param ")[1].split(")")[0].split(" ")
@@ -111,8 +112,8 @@ class wastCook:
         #customValue is get_local $0
         valueList  =[]
         stack = []
-        if funcName in self.list["call"]:
-            vData = self.list["call"][funcName]
+        if funcName in self.dict["call"]:
+            vData = self.dict["call"][funcName]
         for cnt in range(len(vData)):
             if vData[cnt] == "(":
                 stack.append(cnt)
@@ -123,14 +124,14 @@ class wastCook:
 
         for value in valueList:
             if (value.find("get_local")>=0):
-                strValue = self.list["call"][funcName].replace(value, customValue)
-                self.list["call"][funcName] = strValue
-        return self.list["call"][funcName]
+                strValue = self.dict["call"][funcName].replace(value, customValue)
+                self.dict["call"][funcName] = strValue
+        return self.dict["call"][funcName]
 
     def getCallArgu(self, funcName):
         valueList=[]
-        if funcName in self.list["call"]:
-            vData = self.list["call"][funcName].strip(" ").strip("(").rstrip(")")
+        if funcName in self.dict["call"]:
+            vData = self.dict["call"][funcName].strip(" ").strip("(").rstrip(")")
             dataType =["get_local ","i32.const ","tee_local ","i64.const "]
             for _type in dataType:
                 tmpData = vData
@@ -171,9 +172,9 @@ class wastCook:
         return value
 
     def setCallArgu(self, funcName, _fromArgu, _toArgu):
-        if funcName in self.list["call"]:
-            callData = self.list["call"][funcName]
-            self.list["call"][funcName]  = callData.replace(_fromArgu, _toArgu)
+        if funcName in self.dict["call"]:
+            callData = self.dict["call"][funcName]
+            self.dict["call"][funcName]  = callData.replace(_fromArgu, _toArgu)
 
 
     def insertData(self, _value1):
@@ -181,27 +182,29 @@ class wastCook:
 
 def iteratorWast(wastClass,KeyData):
     print "\n==========================================================="
-    print "[I] list[%s] : %s " %(wastClass, str(type(wastClass.list[KeyData])))
+    print "[I] list[%s] : %s " %(wastClass, str(type(wastClass.dict[KeyData])))
     print "============================================================"
-    for i in range(0,len(wastClass.list[KeyData])):
+    for i in range(0,len(wastClass.dict[KeyData])):
         print "::: [I] Key Data : " + str(KeyData)
-        for data in wastClass.list[KeyData].items():
+        for data in wastClass.dict[KeyData].items():
             print "     >> " + repr(data)
 
 
 def tester():
     wastClass = wastCook("./hello/hello.wast");
 
-    iteratorWast(wastClass,"target")
-    iteratorWast(wastClass,"function")
-    iteratorWast(wastClass,"call")
-    iteratorWast(wastClass,"data")
-    iteratorWast(wastClass,"global")
-    iteratorWast(wastClass,"import")
+    #iteratorWast(wastClass,"target")
+    #iteratorWast(wastClass,"function")
+    #iteratorWast(wastClass,"call")
+    #iteratorWast(wastClass,"data")
+    #iteratorWast(wastClass,"global")
+    #iteratorWast(wastClass,"import")
+    print wastClass.dict["data"][23][:-3]
+
 
 def main():
     w = wastCook("./hello/hello.wast");
-    a = w.list["call"].keys()
+    a = w.dict["call"].keys()
     w.insertData("aaa")
     for funcName in ["printn"]:
         typeList = w.getApiParam(funcName)
@@ -214,5 +217,5 @@ def main():
         w.insertTestcase(funcName,590)
     w.saveFile("test.wast")
 
-main()
-#tester()
+#main()
+tester()
