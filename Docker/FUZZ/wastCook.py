@@ -55,7 +55,7 @@ class wastCook:
                 else : pass
 
     def replaceData(self, _line, mutatedString):  #(data (i32.const "aaaaa\00"))
-        self.seedLines[_line].replace(self.dict[_line],mutatedString)
+        self.seedLines[_line] = self.seedLines[_line].replace(self.dict["data"][_line],mutatedString)
 
     def insertTestcase(self, funcName, line):
         if funcName in self.dict["target"].keys():
@@ -218,4 +218,4 @@ def main():
     w.saveFile("test.wast")
 
 #main()
-tester()
+#tester()

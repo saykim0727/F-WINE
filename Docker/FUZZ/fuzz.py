@@ -23,7 +23,7 @@ class Fuzzer:
             #time.sleep(0.2)
             #mutator.dumFuzz()
             #mutator.testMutator()  #Make return value for pushTranaction
-			mutator.testMutator2()
+            mutator.testMutator2()
             randomName = ''.join(random.choice(string.ascii_lowercase) for _ in range(6))
             classCleos = Cleos(mod, wallet_name=randomName)
             pub_key = classCleos.createWallet()

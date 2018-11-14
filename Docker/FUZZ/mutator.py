@@ -21,12 +21,16 @@ class Mutator :
         shutil.copyfile(self.seed_dir+self.sName+".abi",self.testcase_dir+self.sName+".abi")
 
     def dataMutator(self,w):
-        for line in w.dict["data"].keys()
-            fromStr = w.dict["data"][line]
-            for i in range(0,len(fromStr)-3):
-                fromStr[i] = chr(random.randrange(0x1,0xff))
-            w.replaceData(line,fromStr)
-
+        lineSelector = random.randrange(0,len(w.dict["data"].keys()))
+        cnt = 0;
+        for line in w.dict["data"].keys():
+            if lineSelector == cnt :
+                fromStr = list(w.dict["data"][line])
+                for i in range(0,len(fromStr)-3):
+                     fromStr[i] = chr(random.randrange(0x1,0xff))
+                w.replaceData(line,''.join(fromStr))
+            cnt = cnt + 1
+            
     def make_testcase(self):
         #cmd is must collected when base fuzzer is changed
         cmd = "cat %s | %s -o %s" % (self.testcase,self.mutator,self.testcase)
@@ -62,7 +66,7 @@ class Mutator :
 
     def testMutator2(self): #only replace data
         w = wastCook(self.seed)
-        dataMutator(w);
+        self.dataMutator(w);
         w.saveFile(self.testcase)
 
     def stringMutation(self):
