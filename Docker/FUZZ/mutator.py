@@ -5,23 +5,36 @@ import random
 import struct
 from configParsor import ConfigParsor
 from wastCook import *
+
 class Mutator :
     def __init__ (self) :
         with open("/FUZZ/config.ini","r") as f :
             datalist = f.readlines()
-            self.sName = ConfigParsor("SEED_NAME",datalist)
-            self.seed_dir = ConfigParsor("CONTRACT", datalist) + self.sName +"/"
-            self.seed = self.seed_dir + self.sName + ".wast"
+            seedDir = ConfigParsor("CONTRACT",datalist)
+            seedList =os.listdir(seedDir)
+            self.sName = seedList[random.randrange(0,len(seedList))]
+            self.seedWast = seedDir + self.sName + "/" + self.sName + ".wast"
+            self.seedAbi = seedDir + self.sName + "/" + self.sName + ".abi"
+
             self.testcase_dir = ConfigParsor("TESTCASE", datalist) +self.sName +"/"
             self.testcase = self.testcase_dir + self.sName + ".wast"
             self.mutator = ConfigParsor("RADAMSA", datalist)
 
         if os.path.isdir(self.testcase_dir) !=True:
             os.mkdir(self.testcase_dir)
-        shutil.copyfile(self.seed_dir+self.sName+".abi",self.testcase_dir+self.sName+".abi")
+        shutil.copyfile(self.seedAbi,self.testcase_dir+self.sName+".abi")
+
+    def getAbiPath(self):
+        return self.seedAbi
+
+    def getWastPath(self):
+        return self.seedWast
+
+    def getSeedName(self):
+        return self.sName   
 
     def dataMutator(self):
-        w= wastCook(self.seed)
+        w= wastCook(self.seedWast)
         lineSelector = random.randrange(0,len(w.dict["data"].keys()))
         cnt = 0;
         for line in w.dict["data"].keys():
@@ -40,7 +53,7 @@ class Mutator :
         testcase_proc.wait()
 
     def testMutator(self): #insertfunction, replace get_local index,
-        w = wastCook(self.seed)
+        w = wastCook(self.seedWast)
         string = self.stringMutation
         w.insertData(string)
         a = w.dict["call"].keys()
@@ -80,7 +93,7 @@ class Mutator :
 
     def dumFuzz(self):
         testcaseFile = open(self.testcase,"w")
-        with open(self.seed,"r") as f:
+        with open(self.seedWast,"r") as f:
             seedData = f.read()
             seedSize = len(seedData)
             for i in range(0,1):

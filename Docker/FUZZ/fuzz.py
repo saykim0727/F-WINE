@@ -3,7 +3,10 @@ from monitor import *
 from mutator  import *
 import os
 import time
+import string
 import sys
+import json
+import random
 
 class Fuzzer:
     def __init__ (self) :
@@ -17,18 +20,20 @@ class Fuzzer:
 
     def setup(self,mod):
         mutator = Mutator()
-        classMonitor = Monitor("/CORE/")
+        sName = mutator.getSeedName()
+        classMonitor = Monitor(sName,"/CORE/")
         i=0
         while True:
-            #time.sleep(0.2)
             #mutator.dumFuzz()
             #mutator.testMutator()  #Make return value for pushTranaction
             mutator.dataMutator()
             randomName = ''.join(random.choice(string.ascii_lowercase) for _ in range(6))
-            classCleos = Cleos(mod, wallet_name=randomName)
+            classCleos = Cleos(mod, sName,wallet_name=randomName)
             pub_key = classCleos.createWallet()
             account = classCleos.createAccount(pub_key)
             classCleos.setContract(account)
+            abiPath = mutator.getAbiPath()
+            method,argu = self.setAbiArgu(abiPath)
             classCleos.pushTransaction(account, "hi","[\"test\"]")
             result = classMonitor.crashMonitor(self._pid)
             i = i +1
@@ -48,6 +53,21 @@ class Fuzzer:
         classCleos.pushTransaction(account, "hi","[\"test\"]")
         result = classMonitor.crashMonitor(self._pid)
 
+
+    def setAbiArgu(self,seedAbi):
+        with open(seedAbi,"r") as f:
+            data = json.load(f)
+            methodNum = random.randrange(0,len(data["structs"]))
+            method = data["structs"][methodNum]["name"]
+            arguNum = len(data["structs"][methodNum]["fields"])
+            argu = ""
+            for i in range(0,arguNum):
+                if "int" in data["structs"][methodNum]["fields"][i]["type"]:
+                    argu = argu + "%d"%(random.randrange(0,9999999)) +","
+                else:
+                    argu = argu + "\"%s\""%("".join([random.choice(string.ascii_lowercase) for _ in range(6)])) + ","
+            argu = "[%s]" %(argu[:-1]) 
+            return method,argu
 
 if __name__ == "__main__":
     mod ="0"
