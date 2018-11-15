@@ -2,13 +2,13 @@ import os
 import shutil
 from configParsor import ConfigParsor
 class Monitor:
-    def __init__(self, core_dir , crash_dir = "/tmp/crash" ):
+    def __init__(self, seedName,core_dir , crash_dir = "/tmp/crash" ):
         self._core_dir   = core_dir
         self._crash_dir = crash_dir
         with open("/FUZZ/config.ini","r") as f:
             datalist = f.readlines()
             self._testcase = ConfigParsor("TESTCASE",datalist)
-            self._seed = ConfigParsor("SEED_NAME",datalist)
+            self._seed = seedName
 
         if os.path.isdir(core_dir) != True:
             os.mkdir(core_dir)
