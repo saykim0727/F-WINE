@@ -1,0 +1,1 @@
+"{\"version\":\"eosio::abi/1.0\",\"types\":[],\"structs\":[{\"name\":\"trypetgacha\",\"base\":\"\",\"fields\":[]}],\"actions\":[{\"name\":\"trypetgacha\",\"type\":\"trypetgacha\",\"ricardian_contract\":\"\"}],\"tables\":[],\"error_messages\":[],\"abi_extensions\":[],\"variants\":[]}"

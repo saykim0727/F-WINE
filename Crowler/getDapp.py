@@ -4,9 +4,10 @@ import json
 import base64
 import os
 
+USER_FILE = "user.txt"
 CLEOS = "/Users/k1rh4/GIT/eos/build/programs/cleos/cleos"
-DISAS = "/Users/k1rh4/GIT/eos/build/libraries/wasm-jit/Source/Programs/Disassemble %s %s"
-CLEOS_OP = " -u %s system listproducers | awk {'print $1'} > userList"
+DISAS = "./Disassemble %s %s"
+CLEOS_OP = " -u %s system listproducers | awk {'print $1'} > %s"
 
 
 def main(accountName, IP="127.0.0.1:8888"):
@@ -46,12 +47,12 @@ if __name__ =="__main__":
             if len(bp) < 4 :
                 pass
 
-            CMD= CLEOS + (CLEOS_OP % bp.strip())
+            CMD= CLEOS + (CLEOS_OP % (bp.strip(),USER_FILE ))
             print CMD
             #os.system(CMD)
-            mystat = os.stat("userList")
+            mystat = os.stat(USER_FILE)
             if(mystat.st_size > 10):
-                with open("userList","r") as f :
+                with open(USER_FILE,"r") as f :
                     for accountName in f.readlines():
                         main(accountName.strip(),bp.strip())
                         pass
