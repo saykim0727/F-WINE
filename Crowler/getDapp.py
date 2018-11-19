@@ -44,14 +44,15 @@ if __name__ =="__main__":
     with open("bpList","r") as bplists :
         for bp in bplists.readlines():
             if len(bp) < 4 :
-                continue
+                pass
 
             CMD= CLEOS + (CLEOS_OP % bp.strip())
             print CMD
-            os.system(CMD)
+            #os.system(CMD)
             mystat = os.stat("userList")
             if(mystat.st_size > 10):
                 with open("userList","r") as f :
                     for accountName in f.readlines():
                         main(accountName.strip(),bp.strip())
                         pass
+            break
