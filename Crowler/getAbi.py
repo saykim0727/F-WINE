@@ -13,6 +13,7 @@ def run():
             saveFile = "%s/%s.abi_" %(user,user)
             with open(saveFile,"w")as outfile: 
                 json.dump(data,outfile)
+                print '[!]Save %s' % (user)
 
 
 if __name__ == "__main__":
