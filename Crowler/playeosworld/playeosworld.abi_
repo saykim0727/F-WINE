@@ -1,1 +1,0 @@
-"{\"version\":\"eosio::abi/1.0\",\"types\":[],\"structs\":[{\"name\":\"empty\",\"base\":\"\",\"fields\":[]}],\"actions\":[{\"name\":\"empty\",\"type\":\"empty\",\"ricardian_contract\":\"\"}],\"tables\":[],\"error_messages\":[],\"abi_extensions\":[],\"variants\":[]}"

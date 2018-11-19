@@ -1,1 +1,0 @@
-"{\"version\":\"eosio::abi/1.0\",\"types\":[],\"structs\":[{\"name\":\"state\",\"base\":\"\",\"fields\":[{\"name\":\"id\",\"type\":\"uint64\"}]}],\"actions\":[],\"tables\":[{\"name\":\"states\",\"index_type\":\"i64\",\"key_names\":[\"id\"],\"key_types\":[\"uint64\"],\"type\":\"state\"}],\"error_messages\":[],\"abi_extensions\":[],\"variants\":[]}"
