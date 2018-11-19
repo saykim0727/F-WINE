@@ -10,7 +10,7 @@ def run():
             response = requests.get(url)
             data = json.loads(response.text)
             data = data["data"]["abi_raw"]
-            saveFile = "%s/%s.abi" %(user,user)
+            saveFile = "%s/%s.abi_" %(user,user)
             with open(saveFile,"w")as outfile: 
                 json.dump(data,outfile)
 
