@@ -1,30 +1,47 @@
 class wastCook:
+    def semanticChecker(self, _str):
+        if _str.count("(") == _str.count(")"): return 1
+        else : return 0
+
     def __init__ (self,seed):
-        self.dict = {"import":{}, "data":{},"global":{},"function":{},"call":{},"target":{}}
+        self.dict = {"type":{},"import":{}, "data":{},"global":{},"function":{},"call":{},"target":{}}
         self.seedLines = []
-        cntOriginLine = -1;
+        cntOriginLine = 0;
         self.testcase = {}
         with open(seed,"r") as f :
             while True:
-                data = f.readline().strip("\n");
-                cntOriginLine +=1
-                if(data=="") : break;
-                self.seedLines.append(data+"\n")
+                data = f.readline();
+                if(data=="") :
+                    break;
+                else:
+                    data = data.strip()
 
                 if("(export " in data[:9]):
                     pass
 
                 elif("(type " in data[:7]) :
+                    while True:
+                        if self.semanticChecker(data): break;
+                        else: data += f.readline().strip("\n").strip()
+                    typeName = data.split("(type ")[1].split(" ")[0]
+                    self.dict["type"][typeName] = data
                     pass
 
                 elif("(import " in data[:9]) and ("(func $" in data ) :
+                    while True:
+                        if self.semanticChecker(data): break;
+                        else: data += f.readline().strip("\n").strip()
                     funcName = data.split("(func $")[1].split(" ")[0]
                     self.dict["import"][funcName]=data
+                    pass
 
                 elif("(data " in data[:7]):
-                    #remove
+                    while True:
+                        if self.semanticChecker(data): break;
+                        else: data += f.readline().strip("\n").strip()
                     _data = data.split("\"")[1].split("\")")[0]
                     self.dict["data"][cntOriginLine]=_data
+                    pass
 
                 elif("(global " in data[:9]):
                     # Not implement Yet
@@ -38,21 +55,44 @@ class wastCook:
                 elif("(func " in data):
                     funcName = data.split("$")[1].split(" ")[0]
                     self.dict["function"][funcName]=data
+                    pass
 
-                elif("(call " in data):
-                    callString = ""
-                    callFuncName = data.split("(call $")[1].split(" ")[0].split(")")[0]
-                    while True:
-                        callString += data
-                        self.dict["call"][callFuncName]=callString
-                        if callString.count("(") == callString.count(")"):
-                            if (callFuncName in self.dict["import"]) :
-                                self.dict["target"][callFuncName] = cntOriginLine
-                            break
-                        data = f.readline().strip("\n");
-                        self.seedLines.append(data+"\n")
-                        cntOriginLine +=1
-                else : pass
+                elif("call " in data):
+                    if "(call" in data :  # Our Case
+                        while True:
+                            if self.semanticChecker(data): break;
+                            else: data += f.readline().strip("\n").strip()
+
+                        callString = ""
+                        callFuncName = data.split("(call $")[1].split(" ")[0].split(")")[0]
+                        while True:
+                            callString += data
+                            self.dict["call"][callFuncName]=callString
+                            if callString.count("(") == callString.count(")"):
+                                if (callFuncName in self.dict["import"]) :
+                                    self.dict["target"][callFuncName] = cntOriginLine
+                                break
+                            data = f.readline().strip("\n");
+                            self.seedLines.append(data+"\n")
+                            cntOriginLine +=1
+                            pass
+                    else :  # Crowler Case
+                        funcName = data.split("$")[1]
+                        for apiStr in self.dict["import"].items():
+                            apiFunc =  str(apiStr).split("(func $")[1].split(" ")[0]
+                            if funcName == apiFunc:
+                                print "COMPARE ",
+                                print "[F] " + funcName ,
+                                print "[A] " + apiFunc,
+                                print " -> " + str(apiStr)
+
+                        pass
+
+                else :
+                    pass
+            
+                cntOriginLine +=1
+                self.seedLines.append(data+"\n")
 
     def replaceData(self, _line, mutatedString):  #(data (i32.const "aaaaa\00"))
         self.seedLines[_line] = self.seedLines[_line].replace(self.dict["data"][_line],mutatedString)
@@ -183,27 +223,29 @@ class wastCook:
 def iteratorWast(wastClass,KeyData):
     print "\n==========================================================="
     print "[I] list[%s] : %s " %(wastClass, str(type(wastClass.dict[KeyData])))
+    #print wastClass.dict[KeyData]
     print "============================================================"
-    for i in range(0,len(wastClass.dict[KeyData])):
-        print "::: [I] Key Data : " + str(KeyData)
-        for data in wastClass.dict[KeyData].items():
-            print "     >> " + repr(data)
+    for data in wastClass.dict[KeyData].items():
+        print "     >> " + repr(data)
 
 
 def tester():
-    wastClass = wastCook("./hello/hello.wast");
-
+    FILE_NAME = "../SEED/dapptimeteam/dapptimeteam.wast"
+    wastClass = wastCook(FILE_NAME);
+    print FILE_NAME
+#   iteratorWast(wastClass,"import")
+    #wastClass = wastCook("./hello/hello.wast");
     #iteratorWast(wastClass,"target")
     #iteratorWast(wastClass,"function")
     #iteratorWast(wastClass,"call")
     #iteratorWast(wastClass,"data")
     #iteratorWast(wastClass,"global")
-    #iteratorWast(wastClass,"import")
-    print wastClass.dict["data"][23][:-3]
-
+    wastClass.saveFile("../SEED/dapptimeteam/dapptimeteam.out")
 
 def main():
-    w = wastCook("./hello/hello.wast");
+    FILE_NAME = "../SEED/dapptimeteam/dapptimeteam.wast"
+    print FILE_NAME
+    w = wastCook(FILE_NAME);
     a = w.dict["call"].keys()
     w.insertData("aaa")
     for funcName in ["printn"]:

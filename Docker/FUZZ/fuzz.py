@@ -45,8 +45,8 @@ class Fuzzer:
         return
 
     def debug(self,mod):
-        classCleos = Cleos(mod) ## debugging mode refer to TEST_SEED
-        classMonitor = Monitor("/CORE/")
+        classCleos = Cleos("./hello",mod) ## debugging mode refer to TEST_SEED
+        classMonitor = Monitor("./hello","/CORE/")
         pub_key = classCleos.createWallet()
         account = classCleos.createAccount(pub_key)
         classCleos.setContract(account)
