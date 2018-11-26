@@ -34,6 +34,7 @@ class Fuzzer:
             classCleos.setContract(account)
             abiPath = mutator.getAbiPath()
             method,argu = self.setAbiArgu(abiPath)
+            if method ==0 and argu ==0 : return 
             classCleos.pushTransaction(account, "hi","[\"test\"]")
             result = classMonitor.crashMonitor(self._pid)
             i = i +1
@@ -45,7 +46,7 @@ class Fuzzer:
         return
 
     def debug(self,mod):
-        classCleos = Cleos("./hello",mod) ## debugging mode refer to TEST_SEED
+        classCleos = Cleos(mod,"./hello") ## debugging mode refer to TEST_SEED
         classMonitor = Monitor("./hello","/CORE/")
         pub_key = classCleos.createWallet()
         account = classCleos.createAccount(pub_key)
@@ -55,20 +56,23 @@ class Fuzzer:
 
 
     def setAbiArgu(self,seedAbi):
-        with open(seedAbi,"r") as f:
-            data = json.load(f)
-            methodNum = random.randrange(0,len(data["structs"]))
-            method = data["structs"][methodNum]["name"]
-            arguNum = len(data["structs"][methodNum]["fields"])
-            argu = ""
-            for i in range(0,arguNum):
-                if "int" in data["structs"][methodNum]["fields"][i]["type"]:
-                    argu = argu + "%d"%(random.randrange(0,9999999)) +","
-                else:
-                    argu = argu + "\"%s\""%("".join([random.choice(string.ascii_lowercase) for _ in range(6)])) + ","
-            argu = "[%s]" %(argu[:-1]) 
-            return method,argu
-
+        if os.path.exists(seedAbi):
+            with open(seedAbi,"r") as f:
+                data = json.load(f)
+                methodNum = random.randrange(0,len(data["structs"]))
+                method = data["structs"][methodNum]["name"]
+                arguNum = len(data["structs"][methodNum]["fields"])
+                argu = ""
+                for i in range(0,arguNum):
+                    if "int" in data["structs"][methodNum]["fields"][i]["type"]:
+                        argu = argu + "%d"%(random.randrange(0,9999999)) +","
+                    else:
+                        argu = argu + "\"%s\""%("".join([random.choice(string.ascii_lowercase) for _ in range(6)])) + ","
+                argu = "[%s]" %(argu[:-1]) 
+                return method,argu
+        else:
+            print "[E] ABI file is not exist" 
+            return 0,0
 if __name__ == "__main__":
     mod ="0"
     fuzzer = Fuzzer()
