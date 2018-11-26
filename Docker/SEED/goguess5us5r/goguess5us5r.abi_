@@ -1,1 +1,0 @@
-"{\"version\":\"eosio::abi/1.0\",\"types\":[],\"structs\":[{\"name\":\"forwardto\",\"base\":\"\",\"fields\":[{\"name\":\"to\",\"type\":\"name\"}]}],\"actions\":[{\"name\":\"forwardto\",\"type\":\"forwardto\",\"ricardian_contract\":\"\"}],\"tables\":[],\"error_messages\":[],\"abi_extensions\":[],\"variants\":[]}"
