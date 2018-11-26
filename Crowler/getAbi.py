@@ -10,12 +10,16 @@ def run():
                 url = "https://eospark.com/api/contract/%s/info" %(user)
                 response = requests.get(url)
                 data = json.loads(response.text)
-                data = data["data"]["abi_raw"]
+   
+                if data["data"]["abi_raw"][0] == "\"":
+                    data = data["data"]["abi_raw"][1:-1]
+                else:
+                    data = data["data"]["abi_raw"]
 
                 saveFile = "%s/%s.abi_" %(user,user)
             
                 with open(saveFile,"w")as outfile: 
-                    json.dump(data,outfile)
+                    outfile.write(data)
                     print '[!]Save %s' % (user)
             except :
                 continue
