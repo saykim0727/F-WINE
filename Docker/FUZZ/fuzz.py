@@ -77,7 +77,8 @@ class Fuzzer:
                         elif "account" in data["structs"][methodNum]["fields"][i]["type"]:
                             argu.append("\"%s\"" % (self.account) )
                         elif "asset" in data["structs"][methodNum]["fields"][i]["type"]:
-                            argu.append("%d"%(random.randrange(0,9999)))
+                            argu.append("\"10000.0000 HEX\"")
+                            #argu.append("%d"%(random.randrange(0,9999)))
                         else:
                             argu.append("\"%s\"" % (self.account) )
                             #argu.append("\"%s\"" % ("".join([random.choice(string.ascii_lowercase) for _ in range(6)]) ))
