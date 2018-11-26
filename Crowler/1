@@ -4,7 +4,7 @@ import json
 import base64
 import os
 SEED_DIR = "./SEED/"
-USER_FILE = "userList_flare.txt"
+USER_FILE = "userlist_eosTracker.txt"
 CLEOS = "/Users/k1rh4/GIT/eos/build/programs/cleos/cleos"
 DISAS = "./Disassemble %s %s"
 CLEOS_OP = " -u %s system listproducers | awk {'print $1'} > %s"
@@ -18,7 +18,6 @@ def main(accountName, IP="127.0.0.1:8888"):
         res = requests.post(URL, data=json.dumps(data))
         if res.status_code == 200:
             resData = json.loads(res.text)
-            print resData
             if(len(resData["wasm"]) > 0 ):
                 if not os.path.exists(accountName):
                     os.mkdir(accountName)

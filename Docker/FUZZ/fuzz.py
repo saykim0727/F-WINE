@@ -64,14 +64,14 @@ class Fuzzer:
                     methodNum = random.randrange(0,len(data["structs"]))
                     method = data["structs"][methodNum]["name"]
                     arguNum = len(data["structs"][methodNum]["fields"])
-                    argu = ""
+                    argu = []
                     for i in range(0,arguNum):
                         if "int" in data["structs"][methodNum]["fields"][i]["type"]:
-                            argu = argu + "%d"%(random.randrange(0,9999)) +","
+                            argu.append("%d"%(random.randrange(0,9999)))
                         else:
-                            argu = argu + "\"%s\""%("".join([random.choice(string.ascii_lowercase) for _ in range(6)])) + "," 
-                    argu = "[%s]" %(argu[:-1]) 
-                    return method,argu
+                            argu.append("\"%s\"" % ("".join([random.choice(string.ascii_lowercase) for _ in range(6)]) ))
+                    retData = ",".join(argu).join("[]")
+                    return method,retData
                 except:
                     print "[E] "+ seedAbi
                     return 0,0

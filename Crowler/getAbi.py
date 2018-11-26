@@ -3,22 +3,20 @@ import json
 import os
 
 def run():
-    with open("user.txt","r") as f:
+    with open("userList_eosPark.txt","r") as f:
         for user in f.readlines():
             user = user[:-1]
             try:
                 url = "https://eospark.com/api/contract/%s/info" %(user)
                 response = requests.get(url)
                 data = json.loads(response.text)
-   
-                if data["data"]["abi_raw"][0] == "\"":
-                    data = data["data"]["abi_raw"][1:-1]
-                else:
-                    data = data["data"]["abi_raw"]
-
-                saveFile = "%s/%s.abi_" %(user,user)
+                data = data["data"]["abi_raw"]
+                saveFile = "../Docker/SEED/%s/%s.abi" %(user,user)
+                #saveFile = "%s/%s.abi" %(user,user)
             
-                with open(saveFile,"w")as outfile: 
+                print saveFile
+                with open(saveFile,"w")as outfile:
+
                     outfile.write(data)
                     print '[!]Save %s' % (user)
             except :

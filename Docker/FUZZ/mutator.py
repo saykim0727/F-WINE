@@ -31,7 +31,7 @@ class Mutator :
         return self.seedWast
 
     def getSeedName(self):
-        return self.sName   
+        return self.sName
 
     def dataMutator(self):
         w= wastCook(self.seedWast)
