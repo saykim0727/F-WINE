@@ -34,8 +34,9 @@ class Fuzzer:
             classCleos.setContract(account)
             abiPath = mutator.getAbiPath()
             method,argu = self.setAbiArgu(abiPath)
+            print method,argu
             if method ==0 and argu ==0 : return 
-            classCleos.pushTransaction(account, "hi","[\"test\"]")
+            classCleos.pushTransaction(account, method,argu)
             result = classMonitor.crashMonitor(self._pid)
             i = i +1
             if result == True or i % 1000 == 0 :
@@ -66,9 +67,9 @@ class Fuzzer:
                     argu = ""
                     for i in range(0,arguNum):
                         if "int" in data["structs"][methodNum]["fields"][i]["type"]:
-                            argu = argu + "%d"%(random.randrange(0,9999999)) +","
+                            argu = argu + "%d"%(random.randrange(0,9999)) +","
                         else:
-                            argu = argu + "\"%s\""%("".join([random.choice(string.ascii_lowercase) for _ in range(6)])) + ","
+                            argu = argu + "\"%s\""%("".join([random.choice(string.ascii_lowercase) for _ in range(6)])) + "," 
                     argu = "[%s]" %(argu[:-1]) 
                     return method,argu
                 except:
