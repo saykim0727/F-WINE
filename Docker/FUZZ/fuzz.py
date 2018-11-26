@@ -31,6 +31,7 @@ class Fuzzer:
             classCleos = Cleos(mod, sName,wallet_name=randomName)
             pub_key = classCleos.createWallet()
             account = classCleos.createAccount(pub_key)
+            self.account = account
             classCleos.setContract(account)
             abiPath = mutator.getAbiPath()
             method,argu = self.setAbiArgu(abiPath)
@@ -68,8 +69,13 @@ class Fuzzer:
                     for i in range(0,arguNum):
                         if "int" in data["structs"][methodNum]["fields"][i]["type"]:
                             argu.append("%d"%(random.randrange(0,9999)))
+                        elif "account" in data["structs"][methodNum]["fields"][i]["type"]:
+                            argu.append("\"%s\"" % (self.account) )
+                        elif "asset" in data["structs"][methodNum]["fields"][i]["type"]:
+                            argu.append("%d"%(random.randrange(0,9999)))
                         else:
-                            argu.append("\"%s\"" % ("".join([random.choice(string.ascii_lowercase) for _ in range(6)]) ))
+                            argu.append("\"%s\"" % (self.account) )
+                            #argu.append("\"%s\"" % ("".join([random.choice(string.ascii_lowercase) for _ in range(6)]) ))
                     retData = ",".join(argu).join("[]")
                     return method,retData
                 except:
