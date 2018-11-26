@@ -58,18 +58,22 @@ class Fuzzer:
     def setAbiArgu(self,seedAbi):
         if os.path.exists(seedAbi):
             with open(seedAbi,"r") as f:
-                data = json.load(f)
-                methodNum = random.randrange(0,len(data["structs"]))
-                method = data["structs"][methodNum]["name"]
-                arguNum = len(data["structs"][methodNum]["fields"])
-                argu = ""
-                for i in range(0,arguNum):
-                    if "int" in data["structs"][methodNum]["fields"][i]["type"]:
-                        argu = argu + "%d"%(random.randrange(0,9999999)) +","
-                    else:
-                        argu = argu + "\"%s\""%("".join([random.choice(string.ascii_lowercase) for _ in range(6)])) + ","
-                argu = "[%s]" %(argu[:-1]) 
-                return method,argu
+                try:
+                    data = json.load(f)
+                    methodNum = random.randrange(0,len(data["structs"]))
+                    method = data["structs"][methodNum]["name"]
+                    arguNum = len(data["structs"][methodNum]["fields"])
+                    argu = ""
+                    for i in range(0,arguNum):
+                        if "int" in data["structs"][methodNum]["fields"][i]["type"]:
+                            argu = argu + "%d"%(random.randrange(0,9999999)) +","
+                        else:
+                            argu = argu + "\"%s\""%("".join([random.choice(string.ascii_lowercase) for _ in range(6)])) + ","
+                    argu = "[%s]" %(argu[:-1]) 
+                    return method,argu
+                except:
+                    print "[E] "+ seedAbi
+                    return 0,0
         else:
             print "[E] ABI file is not exist" 
             return 0,0

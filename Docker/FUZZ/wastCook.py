@@ -81,11 +81,11 @@ class wastCook:
                         for apiStr in self.dict["import"].items():
                             apiFunc =  str(apiStr).split("(func $")[1].split(" ")[0]
                             if funcName == apiFunc:
-                                print "COMPARE ",
-                                print "[F] " + funcName ,
-                                print "[A] " + apiFunc,
-                                print " -> " + str(apiStr)
-
+                                #print "COMPARE ",
+                                #print "[F] " + funcName ,
+                                #print "[A] " + apiFunc,
+                                #print " -> " + str(apiStr)
+                                pass
                         pass
 
                 else :
