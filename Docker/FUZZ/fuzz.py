@@ -21,6 +21,9 @@ class Fuzzer:
     def setup(self,mod):
         mutator = Mutator()
         sName = mutator.getSeedName()
+        dir_ = "/SEED/%s/%s.abi" %(sName,sName)
+        if os.path.exists(dir_) is False:
+            return
         classMonitor = Monitor(sName,"/CORE/")
         i=0
         while True:
@@ -36,7 +39,9 @@ class Fuzzer:
             abiPath = mutator.getAbiPath()
             method,argu = self.setAbiArgu(abiPath)
             print method,argu
-            if method ==0 and argu ==0 : return 
+            if method ==0 and argu ==0: 
+                del classCleos
+                return 
             classCleos.pushTransaction(account, method,argu)
             result = classMonitor.crashMonitor(self._pid)
             i = i +1
