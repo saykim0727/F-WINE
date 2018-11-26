@@ -1,1 +1,1 @@
-"{\"version\":\"eosio::abi/1.0\",\"types\":[],\"structs\":[{\"name\":\"test\",\"base\":\"\",\"fields\":[]}],\"actions\":[{\"name\":\"test\",\"type\":\"test\",\"ricardian_contract\":\"\"}],\"tables\":[],\"error_messages\":[],\"abi_extensions\":[],\"variants\":[]}"
+{\"version\":\"eosio::abi/1.0\",\"types\":[],\"structs\":[{\"name\":\"test\",\"base\":\"\",\"fields\":[]}],\"actions\":[{\"name\":\"test\",\"type\":\"test\",\"ricardian_contract\":\"\"}],\"tables\":[],\"error_messages\":[],\"abi_extensions\":[],\"variants\":[]}
