@@ -19,6 +19,12 @@ class wastCook:
                 if("(export " in data[:9]):
                     pass
 
+                elif("(elem " in data[:7]):
+                    while True:
+                        if self.semanticChecker(data): break;
+                        else: data += f.readline().strip("\n").strip()
+                    pass
+
                 elif("(type " in data[:7]) :
                     while True:
                         if self.semanticChecker(data): break;
@@ -38,7 +44,7 @@ class wastCook:
                 elif("(data " in data[:7]):
                     while True:
                         if self.semanticChecker(data): break;
-                        else: data += f.readline().strip("\n").strip()
+                        else: data += " "+f.readline().strip("\n").strip()
                     _data = data.split("\"")[1].split("\")")[0]
                     self.dict["data"][cntOriginLine]=_data
                     pass

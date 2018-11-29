@@ -13,6 +13,7 @@ class Mutator :
             seedDir = ConfigParsor("CONTRACT",datalist)
             seedList =os.listdir(seedDir)
             self.sName = seedList[random.randrange(0,len(seedList))]
+#            self.sName ="eosjustcrypt"
             self.seedWast = seedDir + self.sName + "/" + self.sName + ".wast"
             self.seedAbi = seedDir + self.sName + "/" + self.sName + ".abi"
 
@@ -42,7 +43,7 @@ class Mutator :
                 fromStr = list(w.dict["data"][line])
                 for i in range(0,len(fromStr)-3):
                      fromStr[i] = chr(random.randrange(0x1,0xff))
-                w.replaceData(line,''.join(fromStr))
+                #w.replaceData(line,''.join(fromStr))
             cnt = cnt + 1
         w.saveFile(self.testcase)
 
