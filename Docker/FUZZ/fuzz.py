@@ -27,6 +27,7 @@ class Fuzzer:
         classMonitor = Monitor(sName,"/CORE/")
         i=0
         while True:
+            print "[!] Trying.... contract : %s " % sName 
             #mutator.dumFuzz()
             #mutator.testMutator()  #Make return value for pushTranaction
             mutator.dataMutator()
@@ -63,26 +64,34 @@ class Fuzzer:
 
 
     def setAbiArgu(self,seedAbi):
+        method  =""
+        arguNum =""
         if os.path.exists(seedAbi):
             with open(seedAbi,"r") as f:
                 try:
                     data = json.load(f)
-                    methodNum = random.randrange(0,len(data["structs"]))
-                    method = data["structs"][methodNum]["name"]
-                    arguNum = len(data["structs"][methodNum]["fields"])
-                    argu = []
-                    for i in range(0,arguNum):
-                        if "int" in data["structs"][methodNum]["fields"][i]["type"]:
-                            argu.append("%d"%(random.randrange(0,9999)))
-                        elif "account" in data["structs"][methodNum]["fields"][i]["type"]:
-                            argu.append("\"%s\"" % (self.account) )
-                        elif "asset" in data["structs"][methodNum]["fields"][i]["type"]:
-                            argu.append("\"10000.0000 HEX\"")
-                            #argu.append("%d"%(random.randrange(0,9999)))
-                        else:
-                            argu.append("\"%s\"" % (self.account) )
-                            #argu.append("\"%s\"" % ("".join([random.choice(string.ascii_lowercase) for _ in range(6)]) ))
-                    retData = ",".join(argu).join("[]")
+                    actionNumber = random.randrange(0,len(data["actions"]))
+                    method = data["actions"][actionNumber]["name"]
+                    for structsCnt in range(0,len(data["structs"])):
+                        structsCtx = data["structs"][structsCnt]
+                        if method == structsCtx["name"] :
+                            arguNum = len(structsCtx["fields"])
+                            argu=[]
+                            for i in range(0,arguNum):
+                                if "int" in structsCtx["fields"][i]["type"]:
+                                    argu.append("%d"%(random.randrange(0,9999)))
+                                elif "account" in structsCtx["fields"][i]["type"]:
+                                    argu.append("\"%s\"" % (self.account) )
+                                elif "asset" in structsCtx["fields"][i]["type"]:
+                                     argu.append("\"10000.0000 HEX\"")
+                                    # argu.append("%d"%(random.randrange(0,9999)))
+                                    #argu.append("\"%s\"" % (self.account) )
+                                else:
+                                    argu.append("\"%s\"" % (self.account) )
+                            retData = ",".join(argu).join("[]")
+                            break;
+                        else: continue;
+
                     return method,retData
                 except:
                     print "[E] "+ seedAbi

@@ -14,7 +14,7 @@ class Nodeos :
 
 
     def runNodeos(self):
-        cmdline = [self._NODEOS , "-e", "-p" , "eosio","--plugin" ,"eosio::chain_api_plugin" , "--plugin" ,"eosio::history_api_plugin" ,"--contracts-console","--delete-all-blocks","--hard-replay-blockchain" ]
+        cmdline = [self._NODEOS , "-e", "-p" , "eosio","--plugin" ,"eosio::chain_api_plugin" , "--plugin" ,"eosio::history_api_plugin","--verbose-http-errors" ,"--contracts-console","--delete-all-blocks","--hard-replay-blockchain" ]
         if self._mod == "1":
             self._proc = subprocess.Popen(cmdline)
         else :
