@@ -62,18 +62,18 @@ class wastCook:
                     temp = data.strip("\n").strip()
                     forImport = "(param"
                     funcName = temp.split("$")[1]
-                    temp=f.readline()
+                    temp=f.readline().strip()
                     
                     while True:
                         if ("param" not in temp) or ("result" not in temp):
                             self.dict["function"][funcName]=data
-                            self.dict["import"][funcName]=forImport
+                            #self.dict["import"][funcName]=forImport
                             break
                         else:
                             if("param" in temp):
                                 forImport += " "+temp.split(" ")[2]
                             data+=temp
-                            temp=f.readline()
+                            temp=f.readline().strip()
 
                 elif("call " in data):
                     if "(call" in data :  # Our Case
