@@ -1,8 +1,14 @@
 #!/bin/sh 
 NAME="analysis"
 
-sudo rm -rf ./CRASH
-sudo cp -r ../Docker/CRASH ./CRASH
+if [ $1 ] ; then
+    sudo rm -rf ./CRASH
+    sudo mkdir ./CRASH
+    sudo cp -r ../Docker/CRASH/$1 ./CRASH/$1
+else
+    sudo rm -rf ./CRASH
+    sudo cp -r ../Docker/CRASH ./CRASH
+fi
 
 sudo docker rm $NAME
 sudo docker kill $NAME
