@@ -43,7 +43,7 @@ class Mutator :
                 fromStr = list(w.dict["data"][line])
                 for i in range(0,len(fromStr)-3):
                      fromStr[i] = chr(random.randrange(0x1,0xff))
-                #w.replaceData(line,''.join(fromStr))
+                w.replaceData(line,''.join(fromStr))
             cnt = cnt + 1
         w.saveFile(self.testcase)
 
