@@ -19,7 +19,7 @@ class Mutator :
 
             self.testcase_dir = ConfigParsor("TESTCASE", datalist) +self.sName +"/"
             self.testcase = self.testcase_dir + self.sName + ".wast"
-            self.mutator = ConfigParsor("RADAMSA", datalist)
+            self.radamsa = ConfigParsor("RADAMSA", datalist)
 
         if os.path.isdir(self.testcase_dir) !=True:
             os.mkdir(self.testcase_dir)
@@ -43,13 +43,13 @@ class Mutator :
                 fromStr = list(w.dict["data"][line])
                 for i in range(0,len(fromStr)-3):
                      fromStr[i] = chr(random.randrange(0x1,0xff))
-                #w.replaceData(line,''.join(fromStr))
+                w.replaceData(line,''.join(fromStr))
             cnt = cnt + 1
         w.saveFile(self.testcase)
 
-    def make_testcase(self):
+    def radamsaMutator(self):
         #cmd is must collected when base fuzzer is changed
-        cmd = "cat %s | %s -o %s" % (self.testcase,self.mutator,self.testcase)
+        cmd = "cat %s | %s -o %s" % (self.seedWast,self.radamsa,self.testcase)
         testcase_proc = subprocess.Popen(cmd,shell=True)
         testcase_proc.wait()
 
@@ -78,7 +78,6 @@ class Mutator :
                 w.insertFunc(funcName,590)
             else : pass
         w.saveFile(self.testcase)
-        self.make_testcase()
 
     def stringMutation(self):
         return  "a" * 10000

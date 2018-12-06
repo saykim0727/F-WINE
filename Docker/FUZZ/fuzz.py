@@ -28,9 +28,21 @@ class Fuzzer:
         i=0
         while True:
             print "[!] Trying.... contract : %s " % sName 
-            #mutator.dumFuzz()
-            #mutator.testMutator()  #Make return value for pushTranaction
+            mutator.dumFuzz()
+            result=self.runTestcase(mutator,mod,sName,classMonitor)
             mutator.dataMutator()
+            result=self.runTestcase(mutator,mod,sName,classMonitor)
+            mutator.radamsaMutator()
+            result=self.runTestcase(mutator,mod,sName,classMonitor)
+            if result == "error": 
+                return
+
+            i = i +1
+            if result == True or i % 1000 == 0 :
+                self.classNode.pskill()
+                break
+        return
+    def runTestcase(self,mutator,mod,sName,classMonitor):
             randomName = ''.join(random.choice(string.ascii_lowercase) for _ in range(6))
             classCleos = Cleos(mod, sName,wallet_name=randomName)
             pub_key = classCleos.createWallet()
@@ -39,19 +51,13 @@ class Fuzzer:
             classCleos.setContract(account)
             abiPath = mutator.getAbiPath()
             method,argu = self.setAbiArgu(abiPath)
-            print method,argu
+            print method, argu
             if method ==0 and argu ==0: 
                 del classCleos
-                return 
+                return "error"
             classCleos.pushTransaction(account, method,argu)
             result = classMonitor.crashMonitor(self._pid)
-            i = i +1
-            if result == True or i % 1000 == 0 :
-                self.classNode.pskill()
-                del classCleos
-                break
-            del classCleos
-        return
+            return result
 
     def debug(self,mod):
         classCleos = Cleos(mod,"./hello") ## debugging mode refer to TEST_SEED

@@ -42,6 +42,7 @@ class Cleos():
                 self._testcase = ConfigParsor("REPLAY",dataList) + self._sName
 
     def createWallet(self):
+#        cmdline = [self._cleos,"wallet","create","-n",self._walletName,"--to-console"]
         cmdline = [self._cleos,"wallet","create","-n",self._walletName]
         wallet_process = subprocess.Popen(cmdline, stdout=subprocess.PIPE)
         for i in range(0,4):
@@ -52,6 +53,7 @@ class Cleos():
         wallet_process.wait()
         #print "[!] CREATE WALLET"
         eosio_key = "5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"
+        #cmdline = [self._cleos,"create","key","--to-console"]
         cmdline = [self._cleos,"create","key"]
         key_process = subprocess.Popen(cmdline ,stdout=subprocess.PIPE)
         key_process.wait()
@@ -80,6 +82,10 @@ class Cleos():
         return account_name
 
     def setContract(self, account_name):
+#        wastFile = self._testcase+"/"+self._sName+".wast"
+##        wasmFile = self._testcase+"/"+self._sName+".wasm"
+#        cmd = "/EOS/eosio-wast2wasm %s %s -n" % (wastFile,wasmFile)
+#        os.system(cmd)
         cmdline = [self._cleos ,"set","contract",account_name,self._testcase]
         #time.sleep(0.1)
         set_process = subprocess.Popen(cmdline, stdout=subprocess.PIPE,stderr=subprocess.PIPE)

@@ -5,7 +5,9 @@ import glob
 import time 
 
 # First you have to make app password in https://myaccount.google.com/security
-
+HOME = "/home/k1rh4/GIT/fuzz2wasm/"
+ANALYZER = HOME + "/CrashAnalyzer/"
+RUN_ANALY= ANALYZER +"/run_docker.sh" 
 def sendMail(me, you, msg):
     smtp = smtplib.SMTP_SSL('smtp.gmail.com', 465)
     if me=="k1rh4.lee@gmail.com":
@@ -22,13 +24,26 @@ def main():
     before_count = 0
     after_count = 0
     while 1 :
-        time.sleep(10);
-        fileList = glob.glob("../Docker/CRASH/*")
+        fileList = glob.glob( HOME+"/Docker/CRASH/*")
         after_count =  len(fileList)
         if(after_count > before_count):
             before_count = after_count
-            sendMail('k1rh4.lee@gmail.com', 'k1rh4.lee@gmail.com', "\n".join(fileList))
-            sendMail('saykim0727@ajou.ac.kr', 'saykim0727@ajou.ac.kr', "\n".join(fileList))
+            import os
+            os.chdir(ANALYZER)
+            recent_file = fileList[-1]
+            print "[D] recent_file : %s " %(recent_file.split("/")[-1])
+            cmd = RUN_ANALY + " " + recent_file.split("/")[-1]
+            print cmd 
+            os.system(cmd)
+            readData =""
+            if os.path.exists( ANALYZER + "./CRASH/log_crash.log"):
+                print "[+]log file exists" 
+                with open(ANALYZER + "./CRASH/log_crash.log") as f : readData = f.read()
+
+            contents = "\n".join(fileList)+"\n" + readData 
+            sendMail('k1rh4.lee@gmail.com', 'k1rh4.lee@gmail.com', contents)
+            sendMail('saykim0727@ajou.ac.kr', 'saykim0727@ajou.ac.kr', contents)
+        time.sleep(10);
 
 if __name__ =="__main__":
     main()
