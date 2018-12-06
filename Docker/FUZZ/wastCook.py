@@ -22,7 +22,7 @@ class wastCook:
                 elif("(elem " in data[:7]):
                     while True:
                         if self.semanticChecker(data): break;
-                        else: data += f.readline().strip("\n").strip()
+                        else: data +=" "+f.readline().strip("\n").strip()
                     pass
 
                 elif("(type " in data[:7]) :
