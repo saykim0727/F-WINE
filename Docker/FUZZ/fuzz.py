@@ -30,11 +30,13 @@ class Fuzzer:
             print "[!] Trying.... contract : %s " % sName 
             mutator.dumFuzz()
             result=self.runTestcase(mutator,mod,sName,classMonitor)
-            #mutator.testMutator()  #Make return value for pushTranaction
             mutator.dataMutator()
+            result=self.runTestcase(mutator,mod,sName,classMonitor)
+            mutator.radamsaMutator()
             result=self.runTestcase(mutator,mod,sName,classMonitor)
             if result == "error": 
                 return
+
             i = i +1
             if result == True or i % 1000 == 0 :
                 self.classNode.pskill()
