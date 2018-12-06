@@ -34,10 +34,6 @@ class Mutator :
     def getSeedName(self):
         return self.sName
 
-    def OnlyRadamsa(self):
-	w=wastCook(self.seedWast)
-	
-
     def dataMutator(self):
         w= wastCook(self.seedWast)
         lineSelector = random.randrange(0,len(w.dict["data"].keys()))
