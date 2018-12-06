@@ -36,6 +36,7 @@ class Fuzzer:
             result=self.runTestcase(mutator,mod,sName,classMonitor)
             if result == "error": 
                 return
+
             i = i +1
             if result == True or i % 1000 == 0 :
                 self.classNode.pskill()
