@@ -28,7 +28,7 @@ class wastCook:
                 elif("(type " in data[:7]) :
                     while True:
                         if self.semanticChecker(data): break;
-                        else: data += f.readline().strip("\n").strip()
+                        else: data += " "+f.readline().strip("\n").strip()
                     typeName = data.split("(type ")[1].split(" ")[0]
                     self.dict["type"][typeName] = data
                     pass
@@ -36,7 +36,7 @@ class wastCook:
                 elif("(import " in data[:9]) and ("(func $" in data ) :
                     while True:
                         if self.semanticChecker(data): break;
-                        else: data += f.readline().strip("\n").strip()
+                        else: data +=" "+ f.readline().strip("\n").strip()
                     funcName = data.split("(func $")[1].split(" ")[0]
                     self.dict["import"][funcName]=data
                     pass
@@ -59,6 +59,8 @@ class wastCook:
                     pass
 
                 elif("(func " in data):
+                    pass
+                    '''
                     temp = data.strip("\n").strip()
                     forImport = "(param"
                     funcName = temp.split("$")[1]
@@ -74,12 +76,13 @@ class wastCook:
                                 forImport += " "+temp.split(" ")[2]
                             data+=temp
                             temp=f.readline().strip()
+                    '''
 
                 elif("call " in data):
                     if "(call" in data :  # Our Case
                         while True:
                             if self.semanticChecker(data): break
-                            else: data += f.readline().strip("\n").strip()
+                            else: data += " "+ f.readline().strip("\n").strip()
 
                         callString = ""
                         callFuncName = data.split("(call $")[1].split(" ")[0].split(")")[0]
