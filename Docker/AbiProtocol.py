@@ -31,7 +31,7 @@ class abiCook:
         return tmpDic
 
     def cook(self):
-        fileFormat = {"version":"","structs":[],"types":[],"actions":[],"tables":[]}
+        fileFormat = {"version":"","structs":[],"types":[],"actions":[],"tables":[],"error_messages":[],"abi_extensions":[],"variants":[]}
         fileFormat["version"] = self.carving()
 
         ## set types elements
@@ -52,64 +52,60 @@ class abiCook:
         fileFormat["structs"] = tmpList
         #print fileFormat
 
-        #set action elements 
+        #set action elements
+        tmpList = []
         for i in range(self.getCount("action")):
-            print "[A] ", self.abiByte[self.base:self.base+16],
-            print "->" ,
+            print "[A] " + self.abiByte[self.base:self.base+16] + "->" ,
             self.base = self.base + 16
-            cnt = int ( self.abiByte[self.base:self.base+self.byteSize],16)
+            cnt = self.getCount("Action Value")
             cnt = (cnt+1) * self.byteSize
-            self.base = self.base + self.byteSize
-            print self.abiByte[self.base : self.base+cnt].decode("hex"),
-            print ":",
-            print self.abiByte[self.base : self.base+cnt]
+            actionName = self.abiByte[self.base : self.base+cnt].decode("hex").strip("\x00")
+            tmpDic={'name':actionName,'type':actionName,'ricardian_contract':''}
+            tmpList.append(tmpDic)
+            print actionName + " : " + self.abiByte[self.base : self.base+cnt]
+
             self.base = self.base+cnt
+        fileFormat["actions"]=tmpList
 
 
         #set Table elements 
-
         iteratorNum = self.getCount("Table")
-        #for i in range(0,iteratorNum):
+        tmpList = []
         for i in range(0,iteratorNum):
-            print "[??] "+ self.abiByte[self.base:self.base+16]
+            tmpDic = {}
+            print "[TABLE_H?] "+ self.abiByte[self.base:self.base+16]
             self.base = self.base + 16
-            print "[T] " ,
-            cnt = self.getCount("T Str")
-            cnt = (cnt) * self.byteSize
-            print self.abiByte[self.base:self.base+cnt].decode("hex"),
-            print "->",
-            print self.abiByte[self.base: self.base+cnt]
-            self.base = self.base + cnt
-            i3 = 0
-            listCnt = self.getCount("T1")
+            tableName = self.carving()
+            #print "[T]"+tableName
+            tmpDic["index_type"] = tableName
+
+            listCnt = self.getCount("list")
             for i2 in range(listCnt):
-                length = self.getCount("T2 Str")
-                print "[T2]",
-                print self.abiByte[self.base:self.base+length*2].decode("hex"),
-                print "->",
-                print self.abiByte[self.base:self.base+length*2]
-                self.base = self.base + length*2
-            listCnt = self.getCount("T2")
+                t2Value = self.carving()
+                #print "[T2]" + t2Value
+                tmpDic["key_names"] = [t2Value]
+ 
+            listCnt = self.getCount("list")
             for i2 in range(listCnt):
-                length = self.getCount("T2 Str")
-                print "[T2]",
-                print self.abiByte[self.base:self.base+length*2].decode("hex"),
-                print "->",
-                print self.abiByte[self.base:self.base+length*2]
-                self.base = self.base+length*2
-            
-            length  = self.getCount("T3")
-            print "[T3]",
-            print self.abiByte[self.base:self.base+length*2].decode("hex"),
-            print "->",
-            print self.abiByte[self.base:self.base + length*2]
-            self.base = self.base + length*2
+                t2Value = self.carving()
+                #print "[T2]" + t2Value
+                tmpDic["key_types"]=[t2Value]
 
+            t3Value = self.carving()
+            #print "[T3]" + t3Value
+            tmpDic["type"] = t3Value
+            tmpDic["name"] = t3Value
+            tmpList.append(tmpDic)
+        fileFormat["tables"]=tmpList
+        #print self.abiByte[self.base::]
+        return fileFormat
 
-    print "#######################################################"
-#        print fileFormat
-
+    def data2json(self, data):
+        import json
+        return json.dumps(data)
 
 
 cook = abiCook("/eoscryptojps/eoscryptojps.abi__")
-cook.cook()
+dic = cook.cook()
+print cook.data2json(dic)
+
