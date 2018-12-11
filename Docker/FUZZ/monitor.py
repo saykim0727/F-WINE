@@ -21,14 +21,16 @@ class Monitor:
         import psutil
         import time
         for filename in  os.listdir(self._core_dir):
-            #if "nodeos" in filename:
+            if "nodeos" in filename:
             #if filename.find("core")>=0  and (filename.split(".")[-1].find("6") == -1) :
-            timer = time.time()
-            if os.path.isdir("%s/%s" % (self._crash_dir,timer))==True:
-                timer = tiemr + 0.5
-            os.mkdir("%s/%s" % (self._crash_dir, timer))
-            move("%s/%s" % (self._core_dir,filename), "%s/%s" % (self._crash_dir, timer)) #coredumpy copy
-            shutil.copy("%s" % ("/var/log/cron.log"), "%s/%s" % (self._crash_dir, timer))
-            shutil.copytree("%s" % (self._testcase + self._seed+"/"),"%s/%s/testcase" % (self._crash_dir,timer)) #testcase directory copy
-            return True
+                timer = time.time()
+                if os.path.isdir("%s/%s" % (self._crash_dir,timer))==True:
+                    timer = tiemr + 0.5
+                os.mkdir("%s/%s" % (self._crash_dir, timer))
+                #coredumpy copy
+                move("%s/%s" % (self._core_dir,filename), "%s/%s" % (self._crash_dir, timer)) 
+                shutil.copy("%s" % ("/var/log/cron.log"), "%s/%s" % (self._crash_dir, timer))
+                #testcase directory copy
+                shutil.copytree("%s" % (self._testcase + self._seed+"/"),"%s/%s/testcase" % (self._crash_dir,timer)) 
+                return True
         return False

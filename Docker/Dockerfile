@@ -32,6 +32,7 @@ ADD ./FUZZ/ /FUZZ/
 ADD ./TEST/ /TEST/
 ADD ./SEED/ /SEED/
 ADD ./start.sh /FUZZ/start.sh
+ADD ./stop.sh /FUZZ/stop.sh
 ADD ./entry.sh /entry.sh
 CMD chmod 755 /FUZZ/start.sh
 CMD chmod 755 /entry.sh 
