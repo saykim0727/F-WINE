@@ -1,4 +1,4 @@
-class selectApi:
+class apiCook:
     apiDic = {}
     def __init__(self):
         import os
@@ -60,12 +60,12 @@ class selectApi:
         if self.apiDic[key]["retType"]:
             retVal = "(drop %s )" % retVal
         return retVal
-
+'''
 import sys
-context = selectApi()
+context = apiCook()
 keyData =context.randomSelection()
 if len(sys.argv) > 1:
     keyData = sys.argv[1]
 print context.genImportApi(keyData)
 print context.genCallApi(keyData,"(i32.load)")
-
+'''
