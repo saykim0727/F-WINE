@@ -4,7 +4,7 @@ class wastCook:
         else : return 0
 
     def __init__ (self,seed):
-        self.dict = {"type":{},"import":{}, "data":{},"global":{},"function":{},"call":{},"target":{}}
+        self.dict = {"type":{},"elem":{},"imp":{},"import":{}, "data":{},"global":{},"function":{},"call":{},"target":{}}
         self.seedLines = []
         cntOriginLine = 0;
         self.testcase = {}
@@ -23,7 +23,7 @@ class wastCook:
                     while True:
                         if self.semanticChecker(data): break;
                         else: data +=" "+f.readline().strip("\n").strip()
-                    pass
+                    self.dict["elem"] = data
 
                 elif("(type " in data[:7]) :
                     while True:
@@ -39,6 +39,8 @@ class wastCook:
                         else: data +=" "+ f.readline().strip("\n").strip()
                     funcName = data.split("(func $")[1].split(" ")[0]
                     self.dict["import"][funcName]=data
+                    self.dict["imp"][funcName]=cntOriginLine
+
                     pass
 
                 elif("(data " in data[:7]):
@@ -59,6 +61,8 @@ class wastCook:
                     pass
 
                 elif("(func " in data):
+                    func = data.split("(func")[1].strip().split(" ")[0]
+                    self.dict["function"][func]=cntOriginLine
                     pass
                     '''
                     temp = data.strip("\n").strip()
@@ -124,6 +128,50 @@ class wastCook:
             
                 cntOriginLine +=1
                 self.seedLines.append(data+"\n")
+
+    def getElemFunctions(self):
+        if self.dict["elem"]: return self.dict["elem"]
+        else : return ""
+
+    def getFunclines(self):
+        if self.dict["function"]: return self.dict["function"]
+        else : return ""
+
+    def genImportApi(self, fName):
+        from apiCook import *
+        apiCook = apiCook()
+        return apiCook.genImportApi(fName)
+
+    def insFuncOffset(self,funcName="", insertData="" , offset = 0):
+        if not self.dict["function"][funcName] :
+            return 0
+    
+        line = self.dict["function"][funcName]
+        for l in range(line,len(self.seedLines)):
+            if ("(func %s" %(funcName) in self.seedLines[line]):
+                line = l
+
+        for l in range(line,len(self.seedLines)):
+            if "(func " in self.seedLines[l]: pass
+            elif "(param " in self.seedLines[l]: pass
+            elif "(type " in self.seedLines[l]: pass
+            elif "(result " in self.seedLines[l]: pass
+            else :
+                line = l
+                break;
+
+        #print "[!!]" + self.seedLines[l]
+        ### IMPORT FUNCTION env import 
+        print self.genImportApi("db_store_i64")
+
+
+
+
+
+
+
+        importLine =  self.dict["imp"].values()[-1]
+        
 
     def replaceData(self, _line, mutatedString):  #(data (i32.const "aaaaa\00"))
         self.seedLines[_line] = self.seedLines[_line].replace(self.dict["data"][_line],mutatedString)
@@ -278,18 +326,11 @@ def main():
     FILE_NAME = "../SEED/dapptimeteam/dapptimeteam.wast"
     print FILE_NAME
     w = wastCook(FILE_NAME);
-    a = w.dict["call"].keys()
-    w.insertData("aaa")
-    for funcName in ["printn"]:
-        typeList = w.getApiParam(funcName)
-        if typeList == None:
-            w.insertTestcase(funcName,590)
-            continue
-        for paramType in typeList:
-            linetype = {"i32":"1000000","i64":"5000000","f32":"10000000","f64":"15000000"}
-            w.setApiParam(funcName,"%s.const %s" % (paramType,linetype[paramType]))
-        w.insertTestcase(funcName,590)
+    #print w.getElemFunctions()
+    #print w.getFunclines()
+    w.insFuncOffset("$45")
+
     w.saveFile("test.wast")
 
-#main()
+main()
 #tester()

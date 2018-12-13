@@ -59,15 +59,24 @@ class Fuzzer:
             result = classMonitor.crashMonitor(self._pid)
             return result
 
-    def debug(self,mod):
-        classCleos = Cleos(mod,"./hello") ## debugging mode refer to TEST_SEED
-        classMonitor = Monitor("./hello","/CORE/")
+    def debug(self,mod , testContract="./hello"):
+        randomName = ''.join(random.choice(string.ascii_lowercase) for _ in range(6))
+        classCleos = Cleos(mod,testContract, wallet_name=randomName)
+        ## debugging mode refer to TEST_SEED
+        classMonitor = Monitor(testContract,"/CORE/")
         pub_key = classCleos.createWallet()
         account = classCleos.createAccount(pub_key)
         classCleos.setContract(account)
-        classCleos.pushTransaction(account, "hi","[\"test\"]")
+        self.account = account
+        method, argu = self.setAbiArgu("/SEED/%s/%s.abi" %(testContract, testContract))
+        #classCleos.pushTransaction(account, "hi","[\"test\"]")
+        import time
+        time.sleep(20)
+        classCleos.pushTransaction(account, method,argu)
         result = classMonitor.crashMonitor(self._pid)
-
+        time.sleep(5)
+        import sys
+        sys.exit()
 
     def setAbiArgu(self,seedAbi):
         method  =""
@@ -82,18 +91,20 @@ class Fuzzer:
                         structsCtx = data["structs"][structsCnt]
                         if method == structsCtx["name"] :
                             arguNum = len(structsCtx["fields"])
-                            argu=[]
+                            argu = []
                             for i in range(0,arguNum):
                                 if "int" in structsCtx["fields"][i]["type"]:
-                                    argu.append("%d"%(random.randrange(0,9999)))
+                                    argu.append("%d"%(random.randrange(-1,2)))
                                 elif "account" in structsCtx["fields"][i]["type"]:
-                                    argu.append("\"%s\"" % (self.account) )
+                                    argu.append(self.account)
                                 elif "asset" in structsCtx["fields"][i]["type"]:
                                      argu.append("\"10000.0000 HEX\"")
+                                elif "name" in structsCtx["fields"][i]["type"]:
+                                    argu.append((self.account))
                                     # argu.append("%d"%(random.randrange(0,9999)))
                                     #argu.append("\"%s\"" % (self.account) )
                                 else:
-                                    argu.append("\"%s\"" % (self.account) )
+                                    argu.append(self.account )
                             retData = ",".join(argu).join("[]")
                             break;
                         else: continue;
@@ -108,11 +119,15 @@ class Fuzzer:
 if __name__ == "__main__":
     mod ="0"
     fuzzer = Fuzzer()
-    if len(sys.argv)==2 and sys.argv[1] == "debug":
+    if len(sys.argv)>=2 and sys.argv[1] == "debug":
         mod = "1"
         print "[!] Debug mod\n"
         fuzzer.run_node(mod)
-        fuzzer.debug(mod)
+        if ( len(sys.argv)>2 ) :
+            print "[!]run contract : %s " % sys.argv[2]
+            fuzzer.debug(mod, sys.argv[2]);
+        else:
+            fuzzer.debug(mod)
         sys.exit()
 
     while 1:
