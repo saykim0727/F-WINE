@@ -42,7 +42,7 @@ class apiCook:
             return 0
         
         if self.apiDic[key]["retType"] : 
-            retType="(return %s)" % self.apiDic[key]["retType"]
+            retType="(result %s)" % self.apiDic[key]["retType"]
         else : retType=""
             
         if self.apiDic[key]["argu"]:
