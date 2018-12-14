@@ -69,9 +69,11 @@ class Fuzzer:
         classCleos.setContract(account)
         self.account = account
         method, argu = self.setAbiArgu("/SEED/%s/%s.abi" %(testContract, testContract))
+
+        print "[+] method: %s , argu: %s " %(method, "".join(argu))
         #classCleos.pushTransaction(account, "hi","[\"test\"]")
         import time
-        time.sleep(20)
+        time.sleep(1)
         classCleos.pushTransaction(account, method,argu)
         result = classMonitor.crashMonitor(self._pid)
         time.sleep(5)
