@@ -162,10 +162,22 @@ class wastCook:
                 break;
         return line
 ##########################################################
-# Insert api in Import line 
+# Insert api in Import line  &&
+# Insert data 1 line for API's arguments 
 ##########################################################
     def setImportFunc(self,fName):
         #print self.genImportApi("db_store_i64")
+        line = 0
+        for l in self.dict["data"].keys():
+            if line < l : line = l
+
+        while 1: 
+            if not "(data" in self.seedLines[line] : 
+                break
+            line +=1
+        
+        self.seedLines.insert(line,'(data (i32.const 10240) \"%s\\00\")\n' %('A'*100))
+
         import apiCook
         apiCook = apiCook.apiCook()
         importTemplate = apiCook.genImportApi(fName)+"\n"
@@ -175,7 +187,8 @@ class wastCook:
             if LastImportLine < n : LastImportLine = n
 
         print "[+] Insert Line:[%d], Import func:[%s] " %(LastImportLine ,importTemplate)
-        self.seedLines.insert(LastImportLine+1,importTemplate)
+        self.seedLines.insert(LastImportLine,importTemplate)
+
 
 #############################################################
 # Make arguments (for insert argument) and insert API data 
