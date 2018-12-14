@@ -150,6 +150,7 @@ class wastCook:
         for l in range(line,len(self.seedLines)):
             if ("(func %s" %(funcName) in self.seedLines[line]):
                 line = l
+                break
 
         for l in range(line,len(self.seedLines)):
             if "(func " in self.seedLines[l]: pass
@@ -337,13 +338,13 @@ def tester():
 
 def main():
     #FILE_NAME = "../SEED/dapptimeteam/dapptimeteam.wast"
-    FILE_NAME = "./replay/hello/hello.wast"
+    FILE_NAME = "./replay/hello/hello2.wast"
     print FILE_NAME
     w = wastCook(FILE_NAME)
     w.GetInsFuncLine("hello")
     w.setImportFunc("db_store_i64")
 
-    w.saveFile("test.wast")
+    w.saveFile("./replay/hello/hello.wast")
 
 #main()
 #tester()
