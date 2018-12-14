@@ -32,11 +32,15 @@ class apiCook:
     def randomSelection(self):
         import random
         return random.choice(list(self.apiDic.keys()))
-
+##################################################################
+# Generate Import table string 
+#################################################################
     def genImportApi(self,key=""):
         importApi   = ""
-        if not key : return 0
-
+        if key and (key not in self.apiDic.keys()):
+            print "[E] API KEY = [%s] IS NOT EXIST" % key 
+            return 0
+        
         if self.apiDic[key]["retType"] : 
             retType="(return %s)" % self.apiDic[key]["retType"]
         else : retType=""
@@ -49,15 +53,17 @@ class apiCook:
             template = "(import \"env\" \"%s\" (func $%s %s ))"
             importApi = template % (key,key,retType)
         return importApi
-
-    def genCallApi(self, key ,argu=[]):
+##################################################################
+# if function have return value , you have to drop this from stack 
+#################################################################
+    def genCallReturn(self, apiName ,argu=[]):
         retVal = ""
-        if not key : return 0
+        if not apiName : return 0
 
-        if self.apiDic[key]:
-            retVal = "(call $%s %s)" % (key, "".join(argu))
+        if self.apiDic[apiName]:
+            retVal = "(call $%s %s)" % (apiName, "".join(argu))
 
-        if self.apiDic[key]["retType"]:
+        if self.apiDic[apiName]["retType"]:
             retVal = "(drop %s )" % retVal
         return retVal
 '''

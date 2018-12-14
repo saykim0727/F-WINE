@@ -129,24 +129,24 @@ class wastCook:
                 cntOriginLine +=1
                 self.seedLines.append(data+"\n")
 
-    def getElemFunctions(self):
-        if self.dict["elem"]: return self.dict["elem"]
-        else : return ""
+##########################################################
+# find method function line And return this 
+#########################################################
+    def GetInsFuncLine(self,fName="" , offset = 0):
+        line     = 0
+        funcName = ""
+        elemStr  =  self.dict["elem"]
 
-    def getFunclines(self):
-        if self.dict["function"]: return self.dict["function"]
-        else : return ""
-
-    def genImportApi(self, fName):
-        from apiCook import *
-        apiCook = apiCook()
-        return apiCook.genImportApi(fName)
-
-    def insFuncOffset(self,funcName="", insertData="" , offset = 0):
-        if not self.dict["function"][funcName] :
+        elemStr = elemStr.strip("(").strip(")").split(" ")
+        for l in elemStr:
+            if fName in l :
+                funcName = l
+                break
+        try :
+            line = self.dict["function"][funcName]
+        except :
             return 0
-    
-        line = self.dict["function"][funcName]
+
         for l in range(line,len(self.seedLines)):
             if ("(func %s" %(funcName) in self.seedLines[line]):
                 line = l
@@ -157,21 +157,32 @@ class wastCook:
             elif "(type " in self.seedLines[l]: pass
             elif "(result " in self.seedLines[l]: pass
             else :
-                line = l
+                line = l + offset
                 break;
+        return line
+##########################################################
+# Insert api in Import line 
+##########################################################
+    def setImportFunc(self,fName):
+        #print self.genImportApi("db_store_i64")
+        import apiCook
+        apiCook = apiCook.apiCook()
+        importTemplate = apiCook.genImportApi(fName)+"\n"
 
-        #print "[!!]" + self.seedLines[l]
-        ### IMPORT FUNCTION env import 
-        print self.genImportApi("db_store_i64")
+        LastImportLine = 0
+        for n in self.dict["imp"].values():
+            if LastImportLine < n : LastImportLine = n
 
+        print "[+] Insert Line:[%d], Import func:[%s] " %(LastImportLine ,importTemplate)
+        self.seedLines.insert(LastImportLine+1,importTemplate)
 
+#############################################################
+# Make arguments (for insert argument) and insert API data 
+############################################################
+    def setInsertAPI(self, line, v1):
 
+        pass
 
-
-
-
-        importLine =  self.dict["imp"].values()[-1]
-        
 
     def replaceData(self, _line, mutatedString):  #(data (i32.const "aaaaa\00"))
         self.seedLines[_line] = self.seedLines[_line].replace(self.dict["data"][_line],mutatedString)
@@ -310,7 +321,9 @@ def iteratorWast(wastClass,KeyData):
 
 
 def tester():
-    FILE_NAME = "../SEED/dapptimeteam/dapptimeteam.wast"
+    #FILE_NAME = "../SEED/dapptimeteam/dapptimeteam.wast"
+    FILE_NAME = "./replay/hello/hello.wast"
+
     wastClass = wastCook(FILE_NAME);
     print FILE_NAME
 #   iteratorWast(wastClass,"import")
@@ -323,14 +336,14 @@ def tester():
     wastClass.saveFile("../SEED/dapptimeteam/dapptimeteam.out")
 
 def main():
-    FILE_NAME = "../SEED/dapptimeteam/dapptimeteam.wast"
+    #FILE_NAME = "../SEED/dapptimeteam/dapptimeteam.wast"
+    FILE_NAME = "./replay/hello/hello.wast"
     print FILE_NAME
-    w = wastCook(FILE_NAME);
-    #print w.getElemFunctions()
-    #print w.getFunclines()
-    w.insFuncOffset("$45")
+    w = wastCook(FILE_NAME)
+    w.GetInsFuncLine("hello")
+    w.setImportFunc("db_store_i64")
 
     w.saveFile("test.wast")
 
-main()
+#main()
 #tester()
