@@ -148,7 +148,7 @@ class wastCook:
             return 0
 
         for l in range(line,len(self.seedLines)):
-            if ("(func %s" %(funcName) in self.seedLines[line]):
+            if ("(func %s" %(funcName) in self.seedLines[l]):
                 line = l
                 break
 
