@@ -1,3 +1,4 @@
+from apiCook import *
 class wastCook:
     def semanticChecker(self, _str):
         if _str.count("(") == _str.count(")"): return 1
@@ -178,9 +179,8 @@ class wastCook:
         
         self.seedLines.insert(line,'(data (i32.const 10240) \"%s\\00\")\n' %('A'*100))
 
-        import apiCook
-        apiCook = apiCook.apiCook()
-        importTemplate = apiCook.genImportApi(fName)+"\n"
+        apiCookCtx = apiCook()
+        importTemplate = apiCookCtx.genImportApi(fName)+"\n"
 
         LastImportLine = 0
         for n in self.dict["imp"].values():
@@ -193,9 +193,8 @@ class wastCook:
 #############################################################
 # Make arguments (for insert argument) and insert API data 
 ############################################################
-    def setInsertAPI(self, line, v1):
-
-        pass
+    def setAPI(self, line, callStr):
+        self.seedLines.insert(line, callStr)
 
 
     def replaceData(self, _line, mutatedString):  #(data (i32.const "aaaaa\00"))
@@ -325,6 +324,11 @@ class wastCook:
     def insertData(self, _value1):
         self.seedLines.insert(1,' (data (i32.const 1000000) \"%s\\00\")\n' %('a'*10000))
 
+    def genCall(self, apiName):
+        apiCookCtx = apiCook()
+        return apiCookCtx.genCall(apiName)
+        pass
+
 def iteratorWast(wastClass,KeyData):
     print "\n==========================================================="
     print "[I] list[%s] : %s " %(wastClass, str(type(wastClass.dict[KeyData])))
@@ -354,8 +358,12 @@ def main():
     FILE_NAME = "./replay/hello/hello2.wast"
     print FILE_NAME
     w = wastCook(FILE_NAME)
-    w.GetInsFuncLine("hello")
     w.setImportFunc("db_store_i64")
+    callStr = w.genCall("db_store_i64")
+    print "[!!]" + callStr 
+    line = w.GetInsFuncLine("hello")
+    w.setAPI(line,callStr)
+    
 
     w.saveFile("./replay/hello/hello.wast")
 

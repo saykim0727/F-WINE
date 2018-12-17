@@ -62,9 +62,9 @@ class apiCook:
         #(drop (call $db_previous_i64 (i32.const -1)(i32.const -1)))
         if self.apiDic[apiName]["retType"]:
             #retStr = "(result %s)" % (self.apiDic[apiName]["retType"])
-            callStr = "(drop (call $%s %s))" % ( apiName, arguStr )
+            callStr = "(drop (call $%s %s))\n" % ( apiName, arguStr )
         else:
-            callStr ="(call $%s %s)" % ( apiName, arguStr )
+            callStr ="(call $%s %s)\n" % ( apiName, arguStr )
 
         return callStr
 
