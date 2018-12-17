@@ -29,9 +29,53 @@ class apiCook:
         elif typeStr == types[4] : return "i32"
         else : return ""
 
+    def genCall(self,apiName, extraValue="" ):
+        if apiName and (apiName not in self.apiDic.keys()):
+            print "[E] API KEY = [%s] IS NOT EXIST" % apiName 
+            return 0
+
+        print self.apiDic[apiName]
+        #{'retType': 'i32', 'argu': ['i64', 'i64', 'i64', 'i64', 'i32', 'i32']}
+
+        callStr     = ""
+        arguStr     = ""
+
+        for argu in self.apiDic[apiName]["argu"]:
+            if argu == "i64":
+                arguStr += "(i64.load (i32.const 10240))"
+
+            elif argu == "i32":
+                if extraValue :
+                    arguStr += "(i32.const %s)" % extraValue
+                else :
+                    arguStr += "(i32.const 10240)"
+
+            elif argu =="f32":
+                arguStr += "(f32.load (i32.const 10240))"
+
+            elif argu =="f64":
+                arguStr += "(f64.load (i32.const 10240))"
+
+            else:
+                print "[E] OOPS? genCall Argument type has something wrong "
+                return ""
+        #(drop (call $db_previous_i64 (i32.const -1)(i32.const -1)))
+        if self.apiDic[apiName]["retType"]:
+            #retStr = "(result %s)" % (self.apiDic[apiName]["retType"])
+            callStr = "(drop (call $%s %s))" % ( apiName, arguStr )
+        else:
+            callStr ="(call $%s %s)" % ( apiName, arguStr )
+
+        return callStr
+
+
+##################################################################
+# Select random API 
+##################################################################
     def randomSelection(self):
         import random
         return random.choice(list(self.apiDic.keys()))
+
 ##################################################################
 # Generate Import table string 
 #################################################################
@@ -72,6 +116,10 @@ context = apiCook()
 keyData =context.randomSelection()
 if len(sys.argv) > 1:
     keyData = sys.argv[1]
-print context.genImportApi(keyData)
-print context.genCallApi(keyData,"(i32.load)")
+else:
+    keyData = "db_store_i64"
+
+print context.genCall(keyData,"8")
+#print context.genImportApi(keyData)
+#print context.genCallApi(keyData,"(i32.load)")
 '''
