@@ -19,7 +19,7 @@ class Fuzzer:
         print "[!] Nodeos pid : %d " % self._pid
 
     def setup(self,mod):
-        mutator = Mutator()
+        mutator = Mutator("hello")
         sName = mutator.getSeedName()
         dir_ = "/SEED/%s/%s.abi" %(sName,sName)
         if os.path.exists(dir_) is False:
@@ -28,11 +28,12 @@ class Fuzzer:
         i=0
         while True:
             print "[!] Trying.... contract : %s " % sName 
-            mutator.dumFuzz()
-            result=self.runTestcase(mutator,mod,sName,classMonitor)
-            mutator.dataMutator()
-            result=self.runTestcase(mutator,mod,sName,classMonitor)
-            mutator.radamsaMutator()
+            #mutator.dumFuzz()
+            #result=self.runTestcase(mutator,mod,sName,classMonitor)
+            #mutator.dataMutator()
+            #result=self.runTestcase(mutator,mod,sName,classMonitor)
+            #mutator.radamsaMutator()
+            mutator.apiFuzz()
             result=self.runTestcase(mutator,mod,sName,classMonitor)
             if result == "error": 
                 return

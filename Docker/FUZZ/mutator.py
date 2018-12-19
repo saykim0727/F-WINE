@@ -7,13 +7,16 @@ from configParsor import ConfigParsor
 from wastCook import *
 
 class Mutator :
-    def __init__ (self) :
+    def __init__ (self,seedPath="") :
         with open("/FUZZ/config.ini","r") as f :
             datalist = f.readlines()
             seedDir = ConfigParsor("CONTRACT",datalist)
             seedList =os.listdir(seedDir)
             self.sName = seedList[random.randrange(0,len(seedList))]
-#            self.sName ="eosjustcrypt"
+
+            if seedPath == "":pass
+            else : self.sName = seedPath
+
             self.seedWast = seedDir + self.sName + "/" + self.sName + ".wast"
             self.seedAbi = seedDir + self.sName + "/" + self.sName + ".abi"
 
@@ -106,17 +109,41 @@ class Mutator :
     def apiFuzz(self):
         w = wastCook(self.seedWast)
         import apiCook
+        a = apiCook.apiCook()
+        apiName = a.randomSelection()
 
-        a = apiCook()
-        apiName = a.randomSlection()
-        print apiName 
-        
+        randStr = ""
+        for i in range(40):
+            randStr += chr(random.randrange(0x00,0xFF))
 
+        print w.genAPI(apiName,randStr)
+
+        randValue = random.randint(0,12)
+        if randValue % 5 == 0 :
+            print "[D] MUTATION.py 1>" 
+            callStr =  w.genCall(apiName)
+        else:
+            randValue = random.randint(0,12)
+            if randValue % 3 != 0 : 
+                print "[D] MUTATION.py 2>" 
+                randValue = random.randint(-2,3)
+                callStr = w.genCall(apiName, randValue)
+            else :
+                print "[D] MUTATION.py 3>" 
+                randValue = 0xefffffffd
+                callStr = w.genCall(apiName,randValue)
+
+        print callStr
+        line = w.GetInsFuncLine("hello")
+        print line 
+        if type(line) == int:
+            w.setAPI(line,callStr)
+        w.saveFile(self.testcase)
 
 def test():
     print "[D] + TEST"
     m = Mutator()
-    m.dumFuzz()
-
-test()
+    m.apiFuzz()
+   
+#test()
 

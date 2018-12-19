@@ -146,7 +146,7 @@ class wastCook:
         try :
             line = self.dict["function"][funcName]
         except :
-            return 0
+            return "[E] there is no data for %s functions " % funcName
 
         for l in range(line,len(self.seedLines)):
             if ("(func %s" %(funcName) in self.seedLines[l]):
@@ -166,7 +166,7 @@ class wastCook:
 # Insert api in Import line  &&
 # Insert data 1 line for API's arguments 
 ##########################################################
-    def genAPI(self,fName):
+    def genAPI(self,fName, dataStr=""):
         #print self.genImportApi("db_store_i64")
         line = 0
         for l in self.dict["data"].keys():
@@ -176,8 +176,11 @@ class wastCook:
             if not "(data" in self.seedLines[line] : 
                 break
             line +=1
-        
-        self.seedLines.insert(line,'(data (i32.const 10240) \"%s\\00\")\n' %('A'*100))
+
+        if not dataStr :
+            self.seedLines.insert(line,'(data (i32.const 10240) \"%s\\00\")\n' %('A'*100))
+        else:
+            self.seedLines.insert(line,'(data (i32.const 10240) \"%s\\00\")\n' %(dataStr))
 
         apiCookCtx = apiCook()
         importTemplate = apiCookCtx.genImportApi(fName)+"\n"
@@ -327,9 +330,9 @@ class wastCook:
     def insertData(self, _value1):
         self.seedLines.insert(1,' (data (i32.const 1000000) \"%s\\00\")\n' %('a'*10000))
 
-    def genCall(self, apiName):
+    def genCall(self, apiName, extValue =""):
         apiCookCtx = apiCook()
-        return apiCookCtx.genCall(apiName)
+        return apiCookCtx.genCall(apiName, extValue)
         pass
 
 def iteratorWast(wastClass,KeyData):
@@ -371,5 +374,5 @@ def main():
 
     w.saveFile("./replay/hello/hello.wast")
 
-main()
+#main()
 #tester()
