@@ -8,6 +8,9 @@ import sys
 import json
 import random
 
+from threading import Thread, Event
+stop_it = Event()
+
 class Fuzzer:
     def __init__ (self) :
         pass
@@ -119,7 +122,8 @@ class Fuzzer:
         else:
             print "[E] ABI file is not exist" 
             return 0,0
-if __name__ == "__main__":
+
+def main():
     mod ="0"
     fuzzer = Fuzzer()
     if len(sys.argv)>=2 and sys.argv[1] == "debug":
@@ -136,3 +140,18 @@ if __name__ == "__main__":
     while 1:
         fuzzer.run_node(mod)
         fuzzer.setup(mod)
+
+if __name__ =="__main__":
+    while 1:
+        print "[!] START FUZZER THREAD."
+        time.sleep(1)
+        stuff_doing_thread = Thread(target=main)
+        stuff_doing_thread.start()
+        stuff_doing_thread.join(timeout=20)
+        stop_it.set()
+        import os 
+        os.system("pkill -9 nodeos")
+        os.system("pkill -9 keosd")
+        os.system("rm -rf /var/log/cron.log")
+        
+

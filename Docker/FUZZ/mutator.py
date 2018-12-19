@@ -113,8 +113,12 @@ class Mutator :
         apiName = a.randomSelection()
 
         randStr = ""
-        for i in range(40):
-            randStr += chr(random.randrange(0x00,0xFF))
+        randValue = random.randint(0,2)
+        if randValue % 2 == 0 :
+            for i in range(40):
+                randStr += chr(random.randrange(0x00,0xFF))
+        else:
+            randStr = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 
         print w.genAPI(apiName,randStr)
 
