@@ -166,7 +166,7 @@ class wastCook:
 # Insert api in Import line  &&
 # Insert data 1 line for API's arguments 
 ##########################################################
-    def setImportFunc(self,fName):
+    def genAPI(self,fName):
         #print self.genImportApi("db_store_i64")
         line = 0
         for l in self.dict["data"].keys():
@@ -182,12 +182,15 @@ class wastCook:
         apiCookCtx = apiCook()
         importTemplate = apiCookCtx.genImportApi(fName)+"\n"
 
+        if fName in "".join(self.dict["imp"].keys()):
+            return "[D] %s API is already exixst" % fName
+
         LastImportLine = 0
         for n in self.dict["imp"].values():
             if LastImportLine < n : LastImportLine = n
 
-        print "[+] Insert Line:[%d], Import func:[%s] " %(LastImportLine ,importTemplate)
         self.seedLines.insert(LastImportLine,importTemplate)
+        return  "[+] Insert Line:[%d], Import func:[%s] " %(LastImportLine ,importTemplate)
 
 
 #############################################################
@@ -358,14 +361,15 @@ def main():
     FILE_NAME = "./replay/hello/hello2.wast"
     print FILE_NAME
     w = wastCook(FILE_NAME)
-    w.setImportFunc("db_store_i64")
+    print w.genAPI("db_store_i64")
+    #print w.genAPI("prints")
     callStr = w.genCall("db_store_i64")
-    print "[!!]" + callStr 
+    #`print "[!!]" + callStr 
     line = w.GetInsFuncLine("hello")
     w.setAPI(line,callStr)
     
 
     w.saveFile("./replay/hello/hello.wast")
 
-#main()
+main()
 #tester()

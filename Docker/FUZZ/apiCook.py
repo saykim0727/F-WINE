@@ -34,7 +34,7 @@ class apiCook:
             print "[E] API KEY = [%s] IS NOT EXIST" % apiName 
             return 0
 
-        print self.apiDic[apiName]
+        #self.apiDic[apiName]
         #{'retType': 'i32', 'argu': ['i64', 'i64', 'i64', 'i64', 'i32', 'i32']}
 
         callStr     = ""
@@ -97,19 +97,6 @@ class apiCook:
             template = "(import \"env\" \"%s\" (func $%s %s ))"
             importApi = template % (key,key,retType)
         return importApi
-##################################################################
-# if function have return value , you have to drop this from stack 
-#################################################################
-    def genCallReturn(self, apiName ,argu=[]):
-        retVal = ""
-        if not apiName : return 0
-
-        if self.apiDic[apiName]:
-            retVal = "(call $%s %s)" % (apiName, "".join(argu))
-
-        if self.apiDic[apiName]["retType"]:
-            retVal = "(drop %s )" % retVal
-        return retVal
 '''
 import sys
 context = apiCook()

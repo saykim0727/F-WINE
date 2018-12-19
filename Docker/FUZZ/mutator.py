@@ -102,3 +102,21 @@ class Mutator :
                 seedData = seedData[0:randomNumber] + struct.pack("<L",x) + seedData[randomNumber+4::]
             testcaseFile.write(seedData)
         testcaseFile.close()
+
+    def apiFuzz(self):
+        w = wastCook(self.seedWast)
+        import apiCook
+
+        a = apiCook()
+        apiName = a.randomSlection()
+        print apiName 
+        
+
+
+def test():
+    print "[D] + TEST"
+    m = Mutator()
+    m.dumFuzz()
+
+test()
+
