@@ -32,7 +32,7 @@ class Monitor:
                 src = "%s/%s" %(self._core_dir,filename)
                 dst = "%s/%s" %(self._crash_dir,timer)
                 if os.path.exists(src):
-                    move(src,est) 
+                    move(src,dst) 
 
                 #copy stdout 
                 src = "%s" %("/var/log/cron.log")
