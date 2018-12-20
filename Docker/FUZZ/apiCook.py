@@ -2,10 +2,10 @@ class apiCook:
     apiDic = {}
     def __init__(self):
         import os
-        if not os.path.exists("./apiList.txt") :
+        if not os.path.exists("/FUZZ/apiList.txt") :
             return -1
 
-        with open("./apiList.txt","r") as f :
+        with open("/FUZZ/apiList.txt","r") as f :
             for line in f.readlines():
                 pureData    = line.strip().strip("(").strip(")")
                 apiName     = pureData[0:pureData.find(",")].strip()
@@ -89,7 +89,7 @@ class apiCook:
             retType="(result %s)" % self.apiDic[key]["retType"]
         else : retType=""
             
-        if self.apiDic[key]["argu"]:
+        if len(self.apiDic[key]["argu"])>2:
             template = "(import \"env\" \"%s\" (func $%s (param %s) %s))"
             importApi = template % (key,key, " ".join(self.apiDic[key]["argu"]),retType)
 
