@@ -22,9 +22,9 @@ RUN pip install psutil
 
 RUN apt-get install -y cron
 
-ADD ./root_crontab /var/spool/cron/crontabs/root
-RUN chown root:crontab /var/spool/cron/crontabs/root
-RUN chmod 600 /var/spool/cron/crontabs/root
+#ADD ./root_crontab /var/spool/cron/crontabs/root
+#RUN chown root:crontab /var/spool/cron/crontabs/root
+#RUN chmod 600 /var/spool/cron/crontabs/root
 
 
 ADD ./EOS/ /EOS/

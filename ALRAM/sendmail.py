@@ -5,7 +5,7 @@ import glob
 import time 
 
 # First you have to make app password in https://myaccount.google.com/security
-HOME = "/home/k1rh4/GIT/fuzz2wasm/"
+HOME = "/home/k1rh4/GIT/F-WINE/"
 ANALYZER = HOME + "/CrashAnalyzer/"
 RUN_ANALY= ANALYZER +"/run_docker.sh" 
 def sendMail(me, you, msg):

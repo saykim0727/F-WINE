@@ -21,20 +21,31 @@ class Monitor:
         import psutil
         import time
         for filename in  os.listdir(self._core_dir):
-            if "nodeos" in filename:
+            if 1==1:
             #if filename.find("core")>=0  and (filename.split(".")[-1].find("6") == -1) :
                 timer = time.time()
                 if os.path.isdir("%s/%s" % (self._crash_dir,timer))==True:
                     timer = tiemr + 0.5
                 os.mkdir("%s/%s" % (self._crash_dir, timer))
+                
                 #coredumpy copy
-                try :
-                    move("%s/%s" % (self._core_dir,filename), "%s/%s" % (self._crash_dir, timer)) 
-                    shutil.copy("%s" % ("/var/log/cron.log"), "%s/%s" % (self._crash_dir, timer))
-                    #testcase directory copy
-                    shutil.copytree("%s" % (self._testcase + self._seed+"/"),"%s/%s/testcase" % (self._crash_dir,timer))
-                except :
-                    pass
+                src = "%s/%s" %(self._core_dir,filename)
+                dst = "%s/%s" %(self._crash_dir,timer)
+                if os.path.exists(src):
+                    move(src,est) 
+
+                #copy stdout 
+                src = "%s" %("/var/log/cron.log")
+                dst = "%s/%s" %(self._crash_dir, timer)
+                if os.path.exists(src):
+                    shutil.copy(src,dst)
+                
+                #testcase directory copy
+                src = "%s" %(self._testcase + self._seed+"/")
+                dst = "%s/%s/testcase" % (self._crash_dir,timer)
+                
+                if os.path.exists(src):
+                    shutil.copytree(src,dst)
 
                 return True
         return False

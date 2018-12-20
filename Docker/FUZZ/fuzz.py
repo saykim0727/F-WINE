@@ -152,6 +152,4 @@ if __name__ =="__main__":
         import os 
         os.system("pkill -9 nodeos")
         os.system("pkill -9 keosd")
-        os.system("rm -rf /var/log/cron.log")
         
-

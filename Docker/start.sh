@@ -8,5 +8,5 @@ if [ $1 ]
 then
 	/usr/bin/python /FUZZ/fuzz.py debug
 else
-	/usr/bin/python /FUZZ/fuzz.py $1 2>/dev/null
+	/usr/bin/python /FUZZ/fuzz.py
 fi
